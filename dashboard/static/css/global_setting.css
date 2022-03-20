@@ -1,0 +1,28 @@
+@import url(../fonts/Oooh_Baby/Oooh_Baby.css);
+@import url(../fonts/Noto_Sans_TC/Noto_Sans_TC.css);
+@import url(../fonts/Material_Icons/Material_Icons.css);
+
+html,
+body {
+    font-size: 1em;
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+}
+
+.font {
+    font-family: 'Oooh Baby', cursive;
+}
+
+.cfont {
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+.index {
+    height: 100%;
+    background-color: rgb(31, 31, 31);
+    padding: 8px;
+    padding-top: 72px;
+    padding-left: 48px;
+    position:relative;
+}

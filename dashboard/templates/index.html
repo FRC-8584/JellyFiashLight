@@ -1,9 +1,48 @@
-<!doctype html> 
-<html lang="en">
+<!DOCTYPE html>
+<html>
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
+        <link rel="icon" href="../static/img/favicon.ico">
+        <link rel="stylesheet" href="../static/css/side-bar.css">
+        <link rel="stylesheet" href="../static/css/top-bar.css">
+        <link rel="stylesheet" href="../static/css/index.css">
+        <script src="../static/js/monaco-editor/min/vs/loader.js"></script>
+        <script src="../static/js/include-html.js"></script>
+        <script src="../static/js/side-bar.js"></script>
+        <script src="../static/js/index.js"></script>
         <title>JellyFishLight</title>
     </head>
+    <body onhashchange="hash_href()">
+        <div id="side-bar" include-html="side-bar.html"></div>
+        <div id="top-bar" include-html="top-bar.html"></div>
+        <div id="home" class="index flex-display">
+            <div class="block">
+                <div class="mode">
+                    <button class="button" onclick="home_mode(this)">Basic</button>
+                    <button class="button" onclick="home_mode(this)">Advance</button>
+                </div>
+                <div id="basic" class="mode-block">
+                    <div id="preprocessing" class="mode-content">
+                        <p class="cfont mode-title">影像前處理</p>
+                    </div>
+                </div>
+                <div id="advance" class="not-display" style="height: 100px;">
+                    <div id="monaco" style="height: 100px;">
 
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="block">
+
+            </div>
+        </div>
+        <div id="settings" class="index flex-display not-display">
+            <div class="block">
+
+            </div>
+        </div>
+    </body>
+    <script>on_load()</script>
 </html>

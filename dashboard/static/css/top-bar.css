@@ -1,0 +1,40 @@
+@import url(global_setting.css);
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+#top-bar {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    padding: 12px 0px 12px 0px;
+    margin: 0;
+    height: 40px;
+    width: 100%;
+    background-color: rgb(40, 40, 40);
+    box-shadow: 0px 1px 10px 1px rgb(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+#top-bar .top-bar-empty {
+    display: none;
+    width: 50px;
+}
+
+#top-bar img {
+    margin-left: 12px;
+    width: 40px;
+}
+
+#top-bar .top-bar-title {
+    margin-left: 10px;
+    font-size: 1.5em;
+    color: rgb(255, 255, 255);
+}
+
+#top-bar .top-bar-empty-2 {
+    flex: 1;
+}
