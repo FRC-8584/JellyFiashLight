@@ -12,12 +12,17 @@
     display: none;
 }
 
+a {
+    color: rgb(62, 62, 62);
+}
+
 #home hr {
-    width: 2px;
+    background: none;
     margin: 8px 0;
-    border: none;
-    display: block;
-    background-color: rgb(62, 62, 62);
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(62, 62, 62);
+    border-width: 50%;
 }
 #home .block {
     flex: 1;
@@ -39,7 +44,7 @@
     color: rgb(62, 62, 62);
     background-color: transparent;
     height: 32px;
-    width: 80px;
+    width: 135px;
     margin: 0;
     transition: border-color 0.5s, color 0.5s;
     cursor: pointer;
@@ -55,20 +60,99 @@
     border-radius: 0 5px 5px 0;
 }
 
-#home .mode-block {
+#home #basic {
     border-style: solid;
     border-width: 1px;
     border-color: rgb(62, 62, 62);
     border-radius: 10px;
-    padding: 12px;
+    margin: 8px 0;
+    padding: 0 12px;
 }
 
-#home .mode-block .mode-title {
+#home #basic hr {
+    background: none;
+    margin: 4px 0;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(62, 62, 62);
+    border-width: 50%;
+}
+
+#home #basic .mode-content {
+    padding: 0 0 8px 0;
+}
+
+#home #basic .mode-content .mode-title {
+    margin: 12px 0;
+    color: rgb(180, 180, 180);
+    font-size: 24px;
+}
+#home #basic .mode-content .mode-remark {
+    color: rgb(180, 180, 180);
+    font-size: 14px;
+}
+
+#home #basic .mode-content .option {
+    display: flex;
+    margin: 8px 0;
+    padding: 0;
+    align-items: center;
+    justify-items: center;
+}
+#home #basic .mode-content .option .option-name {
+    flex: 9;
     margin: 0;
     color: rgb(180, 180, 180);
-    font-size: 20px;
+    font-size: 16px;
+}
+#home #basic .mode-content .option .option-value {
+    flex: 3;
+    margin: 0;
+    color: rgb(180, 180, 180);
+    font-size: 16px;
+    text-align: right;
+}
+#home #basic .mode-content .option .option-unit {
+    flex: 17;
+    margin: 0 0 0 8px;
+    color: rgb(180, 180, 180);
+    font-size: 16px;
+    text-align: left;
 }
 
-#home #basic {
-    margin: 8px 0;
+#home #basic .mode-content .option input[type="range"] {
+    flex: 19;
+    appearance: none;
+    outline: none;
+    background: none;
+}
+#home #basic .mode-content .option input[type="range"]::-webkit-slider-runnable-track {
+    appearance: none;
+    background-color: rgb(62, 62, 62);
+    border-radius: 10px;
+}
+#home #basic .mode-content .option input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    height: 10px;
+    width: 10px;
+    background: rgb(180, 180, 180);
+    border-radius:50%;
+    transition: background-color 0.5s;
+    cursor: pointer;
+}
+#home #basic .mode-content .option input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: rgb(254, 78, 69);
+}
+
+#home #basic .mode-content .option input[type="number"] {
+    align-self: flex-end;
+    width: 120px;
+    border: none;
+    appearance: none;
+    outline: none;
+    margin: auto 0;
+    background-color: rgb(62, 62, 62);
+}
+#home #basic .mode-content .option input[type="number"]::-webkit-inner-spin-button {
+    appearance: none;
 }

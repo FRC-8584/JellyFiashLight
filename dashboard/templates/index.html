@@ -19,12 +19,90 @@
         <div id="home" class="index flex-display">
             <div class="block">
                 <div class="mode">
-                    <button class="button" onclick="home_mode(this)">Basic</button>
-                    <button class="button" onclick="home_mode(this)">Advance</button>
+                    <button id="basic-button" class="button" onclick="home_mode(this)">基礎設置 (Basic)</button>
+                    <button id="advance-button" class="button" onclick="home_mode(this)">進階設置 (Advance)</button>
                 </div>
                 <div id="basic" class="mode-block">
                     <div id="preprocessing" class="mode-content">
-                        <p class="cfont mode-title">影像前處理</p>
+                        <p class="cfont mode-title">影像前處理 (Image Preprocessing)</p>
+                        <div class="option">
+                            <p class="option-name cfont">亮度 (Brightness)</p>
+                            <input id="brightness" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">飽和度 (Saturation)</p>
+                            <input id="saturation" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">藍平衡 (Blue Blance)</p>
+                            <input id="blue-blance" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">紅平衡 (Red Blance)</p>
+                            <input id="red-blance" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">高光修正 (Reduce Highlight)</p>
+                            <input id="reduce-highlight" type="range" min="0" max="255" step="0.05" value="0" oninput="slider_change(this)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="camera" class="mode-content">
+                        <p class="cfont mode-title">相機設定 (Camera Setting)</p>
+                        <p class="cfont mode-remark">
+                            本項設定中部分需要相機硬體支持，詳細請參考<a href="https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html#gaeb8dd9c89c10a5c63c139bf7c4f5704d" target="_blank">OpenCV說明</a>。<br>
+                            (Part of these settings require camera hardware support, please refer to the <a href="https://docs.opencv.org/3.4/d4/d15/group__videoio__flags__base.html#gaeb8dd9c89c10a5c63c139bf7c4f5704d" target="_blank">OpenCV reference</a> for details.)
+                        </p>
+                        <div class="option">
+                            <p class="option-name cfont">畫面寬度 (Frame Width)</p>
+                            <input id="camera-width" type="number" min="0">
+                            <p class="option-unit cfont">像素 (px)</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">畫面高度 (Frame Height)</p>
+                            <input id="camera-height" type="number" min="0">
+                            <p class="option-unit cfont">像素 (px)</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">影格率 (Frame rate)</p>
+                            <input id="camera-fps" type="number" min="0">
+                            <p class="option-unit cfont">張/秒 (frames per second)</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">亮度 (Brightness)</p>
+                            <input id="camera-brightness" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">對比度 (Contrast)</p>
+                            <input id="camera-contrast" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">飽和度 (Saturation)</p>
+                            <input id="camera-saturation" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">色調 (Hue)</p>
+                            <input id="camera-hus" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">增益 (Gain)</p>
+                            <input id="camera-gain" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">曝光 (Exposure)</p>
+                            <input id="camera-exposure" type="number" min="0">
+                            <p class="option-unit cfont">N/A</p>
+                        </div>
                     </div>
                 </div>
                 <div id="advance" class="not-display" style="height: 100px;">

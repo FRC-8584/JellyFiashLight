@@ -32,11 +32,11 @@ function home_mode(obj) {
     let basic = document.getElementById("basic");
     let advance = document.getElementById("advance");
     let monaco = document.getElementById("monaco");
-    if (obj.textContent == "Basic") {
+    if (obj.id == "basic-button") {
         basic.classList.remove("not-display");
         advance.classList.add("not-display");
     }
-    else if (obj.textContent == "Advance") {
+    else if (obj.id == "advance-button") {
         advance.classList.remove("not-display");
         basic.classList.add("not-display");
 
@@ -44,4 +44,14 @@ function home_mode(obj) {
             import_monaco()
         }
     }
+}
+
+function slider_change(obj) {
+    let value_pre = 100 * obj.value / obj.max;
+    obj.nextElementSibling.textContent = value_pre.toFixed(2) + "%"
+}
+
+function slider_reset(obj, value=0) {
+    obj.value = value;
+    slider_change(obj);
 }
