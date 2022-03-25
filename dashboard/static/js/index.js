@@ -2,11 +2,12 @@ function on_load() {
     includeHTML();
 }
 
+var editor;
 function import_monaco() {
     require.config({ paths: { vs: '../static/js/monaco-editor/min/vs' } });
     require(['vs/editor/editor.main'], function () {
         monaco.editor.setTheme('vs-dark');
-        var editor_1 = monaco.editor.create(document.getElementById('monaco'), {
+        editor = monaco.editor.create(document.getElementById('monaco'), {
             value: "print(\"Hello World!\")",
             language: 'python'
         });
@@ -46,12 +47,23 @@ function home_mode(obj) {
     }
 }
 
-function slider_change(obj) {
-    let value_pre = 100 * obj.value / obj.max;
-    obj.nextElementSibling.textContent = value_pre.toFixed(2) + "%"
+function slider_change(obj, before="", after="", percent=0) {
+    let value_pre;
+    if (percent == 0) {
+        value_pre = obj.value;
+    }
+    else {
+        value_pre = percent * obj.value / obj.max;
+        value_pre = value_pre.toFixed(2);
+    }
+    obj.nextElementSibling.textContent = before + value_pre + after;
 }
 
 function slider_reset(obj, value=0) {
     obj.value = value;
     slider_change(obj);
+}
+
+function test() {
+    console.log(editor.getValue());
 }

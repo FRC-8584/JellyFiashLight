@@ -30,9 +30,15 @@ body {
 }
 
 #top-bar .top-bar-title {
-    margin-left: 10px;
+    margin: 0 24px 0 10px;
     font-size: 1.5em;
     color: rgb(255, 255, 255);
+}
+
+#top-bar select {
+    background-color: rgb(62, 62, 62);
+    color: rgb(255, 255, 255);
+    width: 150px;
 }
 
 #top-bar .top-bar-empty-2 {

@@ -5,7 +5,7 @@ import cv2
 from simplejpeg import encode_jpeg
 
 app = Flask(__name__)
-camera = cv2.VideoCapture("http://192.168.2.136:4747/video")
+camera = cv2.VideoCapture(0)
 
 new_frame = ""
 def camara_thread_job():
@@ -18,6 +18,7 @@ def camara_thread_job():
             else:
                 # _, buffer = cv2.imencode('.jpg', frame.copy())
                 # new_frame = buffer.tobytes()
+                cv2.BGR
                 new_frame = encode_jpeg(frame.copy(), colorspace="bgr")
         except:
             pass
