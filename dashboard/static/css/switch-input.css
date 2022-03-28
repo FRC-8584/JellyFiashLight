@@ -1,0 +1,31 @@
+:root {
+    --switch-background-color: rgb(62, 62, 62);
+    --switch-foreground-color: rgb(180, 180, 180);
+}
+
+.switch-input {
+    appearance: none;
+    outline: none;
+    background: none;
+    width: 35px;
+    align-self: flex-start;
+    cursor: pointer;
+}
+.switch-input::-webkit-slider-runnable-track {
+    appearance: none;
+    border-radius: 10px;
+    width: 35px;
+    transition: background-color 0.5s;
+    background-color: var(--switch-background-color);
+}
+.switch-input::-webkit-slider-thumb {
+    appearance: none;
+    background-color: var(--switch-foreground-color);
+    height: 20px;
+    width: 20px;
+    border-radius:50%;
+    transition: background-color 0.5s;
+    transform: scale(0.75);
+    box-shadow: 0px 2px 6px rgb(0, 0, 0);
+    cursor:initial;
+}

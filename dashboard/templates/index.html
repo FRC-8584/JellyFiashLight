@@ -4,12 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
         <link rel="icon" href="../static/img/favicon.ico">
-        <link rel="stylesheet" href="../static/css/side-bar.css">
-        <link rel="stylesheet" href="../static/css/top-bar.css">
         <link rel="stylesheet" href="../static/css/index.css">
         <script src="../static/js/monaco-editor/min/vs/loader.js"></script>
         <script src="../static/js/include-html.js"></script>
         <script src="../static/js/index.js"></script>
+        <script src="../static/js/switch-input.js"></script>
         <title>JellyFishLight</title>
     </head>
     <body onhashchange="hash_href()">
@@ -18,8 +17,8 @@
         <div id="home" class="index flex-display">
             <div class="block">
                 <div class="mode">
-                    <button id="basic-button" class="button" onclick="home_mode(this)">基礎設置 (Basic)</button>
-                    <button id="advance-button" class="button" onclick="home_mode(this)">進階設置 (Advance)</button>
+                    <button id="basic-button" class="button" onclick="location.href='#basic'">基礎設置 (Basic)</button>
+                    <button id="advance-button" class="button" onclick="location.href='#advance'">進階設置 (Advance)</button>
                 </div>
                 <div id="basic" class="mode-block">
                     <div id="preprocessing" class="mode-content">
@@ -59,47 +58,47 @@
                         </p>
                         <div class="option">
                             <p class="option-name cfont">畫面寬度 (Frame Width)</p>
-                            <input id="camera-width" type="number" min="0">
+                            <input id="camera-width" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">像素 (px)</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">畫面高度 (Frame Height)</p>
-                            <input id="camera-height" type="number" min="0">
+                            <input id="camera-height" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">像素 (px)</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">影格率 (Frame Rate)</p>
-                            <input id="camera-fps" type="number" min="0">
+                            <input id="camera-fps" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">張/秒 (Frames Per Second)</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">亮度 (Brightness)</p>
-                            <input id="camera-brightness" type="number" min="0">
+                            <input id="camera-brightness" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">對比度 (Contrast)</p>
-                            <input id="camera-contrast" type="number" min="0">
+                            <input id="camera-contrast" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">飽和度 (Saturation)</p>
-                            <input id="camera-saturation" type="number" min="0">
+                            <input id="camera-saturation" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">色調 (Hue)</p>
-                            <input id="camera-hus" type="number" min="0">
+                            <input id="camera-hus" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">增益 (Gain)</p>
-                            <input id="camera-gain" type="number" min="0">
+                            <input id="camera-gain" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">曝光 (Exposure)</p>
-                            <input id="camera-exposure" type="number" min="0">
+                            <input id="camera-exposure" class="cfont" type="number" min="0">
                             <p class="option-unit cfont">N/A</p>
                         </div>
                     </div>
@@ -133,9 +132,17 @@
                         <p class="cfont mode-title">程式區塊 (Coding Block)</p>
                         <div class="option">
                             <p class="option-name cfont">啟用程式區塊 (Enable Coding Block)</p>
-                            <input id="enable-code" class="switch-input" class="range-input" type="range" min="0" max="1" step="1" value="0" disabled>
+                            <input id="enable-code" class="switch-input" type="range" min="0" max="1" step="1" onclick="switch_input(this)">
                         </div>
+                        <p class="cfont mode-remark">
+                            啟用此項設定後將停用基礎設定中的辨識設定。<br>
+                            (Enabling this setting will disable the detecttion settings in the basic settings.)
+                        </p>
                         <div id="monaco"></div>
+                        <div class="option">
+                            <button id="save-code" class="cfont">保存 (Save)</button>
+                            <button id="reset-code" class="cfont">重置 (Reset)</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,6 +150,10 @@
             <div class="block">
                 <p class="cfont block-title">輸出畫面 (Ouput Screen)</p>
                 <img id="camera-stream" src="http://ubuntu.local:5001">
+                <p class="cfont block-title">終端機輸出 (Console Ouput)</p>
+                <div id="console-output">
+                    <textarea id="console-content" class="cfont" disabled></textarea>
+                </div>
             </div>
         </div>
         <div id="settings" class="index flex-display not-display">

@@ -1,3 +1,7 @@
+@import url(advance.css);
+@import url(range-input.css);
+@import url(switch-input.css);
+
 #home .block-title {
     margin: 8px 0;
     color: rgb(180, 180, 180);
@@ -116,6 +120,7 @@
 }
 
 #home .block .mode-block .mode-content .option .text-input {
+    color: rgb(180, 180, 180);
     align-self: flex-end;
     width: 120px;
     border: none;
@@ -126,6 +131,7 @@
 }
 
 #home .block .mode-block .mode-content .option input[type="number"] {
+    color: rgb(180, 180, 180);
     align-self: flex-end;
     width: 120px;
     border: none;

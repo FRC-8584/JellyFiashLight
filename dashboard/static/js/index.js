@@ -1,5 +1,6 @@
 function on_load() {
     includeHTML();
+    hash_href()
 }
 
 var editor;
@@ -16,34 +17,38 @@ function import_monaco() {
 
 function hash_href() {
     let hash = window.location.hash.replace("#", "");
-    if (document.getElementById(hash) == null) {
+    if (hash == "") {
         hash = "home";
     }
-    let traget_element = document.getElementById(hash);
-    traget_element.classList.remove("not-display");
-    let content_elements = document.getElementsByClassName("index");
-    for (let i =0; i < content_elements.length; i++) {
-        if (content_elements[i] != traget_element) {
-            content_elements[i].classList.add("not-display");
-        }
-    }
-}
-
-function home_mode(obj) {
+    let home = document.getElementById("home");
+    let setting = document.getElementById("settings");
     let basic = document.getElementById("basic");
     let advance = document.getElementById("advance");
-    let monaco = document.getElementById("monaco");
-    if (obj.id == "basic-button") {
-        basic.classList.remove("not-display");
-        advance.classList.add("not-display");
-    }
-    else if (obj.id == "advance-button") {
-        advance.classList.remove("not-display");
-        basic.classList.add("not-display");
-
-        if (monaco.children.length == 0) {
-            import_monaco()
-        }
+    switch (hash) {
+        case "home":
+        case "basic":
+        case "advance":
+            home.classList.remove("not-display");
+            setting.classList.add("not-display");
+            switch (hash) {
+                case "advance":
+                    advance.classList.remove("not-display");
+                    basic.classList.add("not-display");
+                    let monaco = document.getElementById("monaco");
+                    if (monaco.children.length == 0) {
+                        import_monaco();
+                    }
+                    break;
+                default:
+                    basic.classList.remove("not-display");
+                    advance.classList.add("not-display");
+                    break;
+            }
+            break;
+        case "settings":
+            setting.classList.remove("not-display");
+            home.classList.add("not-display");
+            break;
     }
 }
 

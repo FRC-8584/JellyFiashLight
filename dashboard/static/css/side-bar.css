@@ -53,6 +53,7 @@
     width: 100%;
     cursor: pointer;
     --icon-color: rgb(169, 169, 169);
+    --border-color: transparent;
     transition: all 0.5s;
     border-left-style: solid;
     border-left-width: 2px;
