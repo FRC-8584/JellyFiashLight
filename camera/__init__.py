@@ -1,1 +1,1 @@
-from .default import *
+from .module import *

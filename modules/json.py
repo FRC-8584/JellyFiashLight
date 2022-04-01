@@ -7,12 +7,12 @@ class json:
     def loads(data):
         return orjson.loads(data)
 
-    def dump(file, data):
+    def dump(file: str, data):
         with open(file, mode='wb') as in_file:
             in_file.write(orjson.umps(data, option=orjson.OPT_INDENT_2))
             in_file.close()
 
-    def load(file):
+    def load(file: str):
         with open(file, mode='r') as in_file:
             data = in_file.read()
             in_file.close()
