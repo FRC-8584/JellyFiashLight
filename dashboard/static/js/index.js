@@ -1,3 +1,23 @@
+const IMG_KEY = [
+    "brightness",
+    "saturation",
+    "contrast",
+    "blue-blance",
+    "red-blance",
+    "reduce-highlight"
+]
+const CAMERA_KEY = [
+    "width",
+    "height",
+    "fps",
+    "brightness",
+    "contrast",
+    "saturation",
+    "hue",
+    "gain",
+    "exposure"
+]
+
 function on_load() {
     includeHTML();
     hash_href()
@@ -30,6 +50,7 @@ function hash_href() {
         case "global":
         case "basic":
         case "advance":
+            camera_change()
             home.classList.remove("not-display");
             setting.classList.add("not-display");
             switch (hash) {
@@ -72,10 +93,77 @@ function slider_change(obj, before="", after="", percent=0) {
     }
     obj.nextElementSibling.textContent = before + value_pre + after;
 }
-
 function slider_reset(obj, value=0) {
     obj.value = value;
     slider_change(obj);
+}
+
+function camera_change() {
+    let value;
+    try {
+        value = document.getElementById("camera-select").value;
+    }
+    catch {
+        value = 0;
+    }
+    let img = document.getElementById("camera-stream");
+    img.src = "/camera_" + value + "?" + Date.now();
+    request_camera()
+}
+
+function request_camera() {
+    let camera_id
+    try {
+        camera_id = document.getElementById("camera-select").value;
+    }
+    catch {
+        camera_id = 0;
+    }
+    let data = {"camera-id": parseFloat(camera_id)};
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Request-type", "request_camera");
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function () {
+        let img_data = JSON.parse(xhr.responseText).config.image;
+        for (let i = 0; i < IMG_KEY.length; i++) {
+            let key = IMG_KEY[i];
+            let target_element = document.getElementById(key);
+            target_element.value = img_data[key];
+            slider_change(target_element, "", "%", 100);
+        }
+        let camera_data = JSON.parse(xhr.responseText).config.camera;
+        for (let i = 0; i < CAMERA_KEY.length; i++) {
+            let key = CAMERA_KEY[i];
+            document.getElementById("camera-" + key).value = camera_data[key];
+        }
+    };
+}
+function send_camera() {
+    let camera_id
+    try {
+        camera_id = document.getElementById("camera-select").value;;
+    }
+    catch {
+        camera_id = 0;
+    }
+    let data = {"camera-id": parseFloat(camera_id), "config":{"image":{}, "camera":{}}};
+    for (let i = 0; i < IMG_KEY.length; i++) {
+        let key = IMG_KEY[i];
+        let value = document.getElementById(key).value;
+        data.config.image[key] = parseFloat(value);
+    }
+    for (let i = 0; i < CAMERA_KEY.length; i++) {
+        let key = CAMERA_KEY[i];
+        let value = document.getElementById("camera-" + key).value;
+        data.config.camera[key] = parseFloat(value);
+    }
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Request-type", "send_camera");
+    xhr.send(JSON.stringify(data));
 }
 
 function test() {

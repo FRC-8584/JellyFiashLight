@@ -1,31 +1,28 @@
 from modules import json, Thread
 from importlib import reload
+from time import sleep
 import cv2, math, numpy as np
 from simplejpeg import encode_jpeg
+
+import camera.camera_0 as camera_0
+import camera.camera_1 as camera_1
+import camera.camera_2 as camera_2
+import camera.camera_3 as camera_3
+import camera.camera_4 as camera_4
 
 class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
-        self.img = np.zeros((320, 640, 3))
+        self.reload()
+        self.img = np.zeros((320, 640, 3), dtype=np.uint8)
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
         self.camera_read_thread.start()
         self.load_config()
 
-        if id == 0:
-            import camera.camera_0 as camera
-        elif id == 1:
-            import camera.camera_1 as camera
-        elif id == 2:
-            import camera.camera_2 as camera
-        elif id == 3:
-            import camera.camera_3 as camera
-        elif id == 4:
-            import camera.camera_4 as camera
-
     def load_config(self):
-        image_config: dict = json.load(f"camera_{self.id}.json").get("image", False)
-        camera_config: dict = json.load(f"camera_{self.id}.json").get("camera", False)
+        image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
+        camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
         if image_config:
             self.config = image_config
         if camera_config:
@@ -40,7 +37,21 @@ class Camera():
             self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
 
     def reload(self):
-        reload(camera)
+        if self.id == 0:
+            reload(camera_0)
+            self.camera_module = camera_0
+        elif self.id == 1:
+            reload(camera_1)
+            self.camera_module = camera_1
+        elif self.id == 2:
+            reload(camera_2)
+            self.camera_module = camera_2
+        elif self.id == 3:
+            reload(camera_3)
+            self.camera_module = camera_3
+        elif self.id == 4:
+            reload(camera_4)
+            self.camera_module = camera_4
 
     # 讀取鏡頭
     def camera_read(self):
@@ -48,6 +59,11 @@ class Camera():
             success, img = self.camera.read()
             if success:
                 self.img = img
+            else:
+                try:
+                    self.camera = cv2.VideoCapture(self.id)
+                except:
+                    sleep(5)
 
     # 調整亮度
     def brightness(self, r_img):
@@ -126,7 +142,7 @@ class Camera():
 
     # 修正高光
     def highlight(self, r_img):
-        value = self.config.get("high-light", 0)
+        value = self.config.get("reduce-highlight", 0)
         if value != 0:
             img_gray = cv2.cvtColor(r_img, cv2.COLOR_BGR2GRAY)
             _, thresh = cv2.threshold(img_gray, 255 - value, 255, 0)
@@ -150,7 +166,10 @@ class Camera():
             img = self.modify_color_temperature(img)
             img = self.saturation(img)
 
-            img = camera.runPipeline(img)
+            try:
+                img = self.camera_module.runPipeline(img)
+            except:
+                pass
 
             frame = encode_jpeg(img.copy(), colorspace="bgr")
             yield (b"--frame\r\nContent-Type:image/jpeg\r\n\r\n" + frame + b"\r\n")
