@@ -17,10 +17,11 @@
         <div id="home" class="index flex-display">
             <div class="block">
                 <div class="mode">
+                    <button id="global-button" class="button" onclick="location.href='#global'">全域設置 (Global)</button>
                     <button id="basic-button" class="button" onclick="location.href='#basic'">基礎設置 (Basic)</button>
                     <button id="advance-button" class="button" onclick="location.href='#advance'">進階設置 (Advance)</button>
                 </div>
-                <div id="basic" class="mode-block">
+                <div id="global" class="mode-block">
                     <div id="preprocessing" class="mode-content">
                         <p class="cfont mode-title">影像前處理 (Image Preprocessing)</p>
                         <div class="option">
@@ -30,6 +31,11 @@
                         </div>
                         <div class="option">
                             <p class="option-name cfont">飽和度 (Saturation)</p>
+                            <input id="saturation" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
+                        </div>
+                        <div class="option">
+                            <p class="option-name cfont">對比度 (Saturation)</p>
                             <input id="saturation" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
@@ -102,7 +108,8 @@
                             <p class="option-unit cfont">N/A</p>
                         </div>
                     </div>
-                    <hr>
+                </div>
+                <div id="basic" class="mode-block not-display">
                     <div id="detection" class="mode-content">
                         <p class="cfont mode-title">辨識設定 (Detection Setting)</p>
                         <div class="option">
@@ -149,7 +156,7 @@
             <hr>
             <div class="block">
                 <p class="cfont block-title">輸出畫面 (Ouput Screen)</p>
-                <img id="camera-stream" src="http://ubuntu.local:5001">
+                <img id="camera-stream" src="/camera_0">
                 <p class="cfont block-title">終端機輸出 (Console Ouput)</p>
                 <div id="console-output">
                     <textarea id="console-content" class="cfont" disabled></textarea>

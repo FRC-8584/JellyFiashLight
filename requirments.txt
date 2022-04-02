@@ -1,5 +1,6 @@
 pynetworktables
 opencv-python
+numpy
 flask
 orjson
 simplejpeg

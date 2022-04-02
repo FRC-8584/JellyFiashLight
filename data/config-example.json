@@ -1,0 +1,21 @@
+{
+    "image": {
+        "brightness": 0,
+        "saturation": 0,
+        "contrast": 0,
+        "blue-blance": 0,
+        "red-blance": 0,
+        "high-light": 0
+    },
+    "camera": {
+        "width": 640,
+        "height": 480,
+        "fps": 90,
+        "brightness": 0,
+        "contrast": 0,
+        "saturation": 0,
+        "hue": 0,
+        "gain": 0,
+        "exposure": 0
+    }
+}

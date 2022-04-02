@@ -1,5 +1,6 @@
-from flask import Flask, make_response, redirect, render_template, request, url_for, Request
+from flask import Flask, Response, render_template, request, Request
 from modules import json
+from camera import Camera
 import typing
 
 def deal_requeste(type_of: str, data: str | bytes, raw_requests: Request):
@@ -12,6 +13,8 @@ def deal_requeste(type_of: str, data: str | bytes, raw_requests: Request):
         return render_template(json.loads(data).get("file_name"))
     return ("", 204)
 
+camera_0 = Camera(0)
+
 class Web_UI():
     app = Flask(__name__)
 
@@ -21,6 +24,10 @@ class Web_UI():
         if request_type != None:
             return deal_requeste(request_type, request.get_data(), request)
         return render_template("index.html")
+
+    @app.route("/camera_0")
+    def camera_0_r():
+        return Response(camera_0.output(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def run(
         self,

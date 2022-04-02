@@ -22,26 +22,35 @@ function hash_href() {
     }
     let home = document.getElementById("home");
     let setting = document.getElementById("settings");
+    let global = document.getElementById("global");
     let basic = document.getElementById("basic");
     let advance = document.getElementById("advance");
     switch (hash) {
         case "home":
+        case "global":
         case "basic":
         case "advance":
             home.classList.remove("not-display");
             setting.classList.add("not-display");
             switch (hash) {
+                case "global":
+                    global.classList.remove("not-display");
+                    basic.classList.add("not-display");
+                    advance.classList.add("not-display");
+                    break;
+                case "basic":
+                    basic.classList.remove("not-display");
+                    global.classList.add("not-display");
+                    advance.classList.add("not-display");
+                    break;
                 case "advance":
                     advance.classList.remove("not-display");
+                    global.classList.add("not-display");
                     basic.classList.add("not-display");
                     let monaco = document.getElementById("monaco");
                     if (monaco.children.length == 0) {
                         import_monaco();
                     }
-                    break;
-                default:
-                    basic.classList.remove("not-display");
-                    advance.classList.add("not-display");
                     break;
             }
             break;
