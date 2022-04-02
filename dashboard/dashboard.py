@@ -3,7 +3,7 @@ from modules import json
 from camera import Camera
 import typing
 
-def deal_requeste(type_of: str, data: str | bytes, raw_requests: Request):
+def deal_requeste(type_of: str, data, raw_requests: Request):
     print(f"Get Request Type:{type_of}")
     try:
         print(f"Data:{data.decode('utf-8')}")
