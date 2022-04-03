@@ -20,7 +20,7 @@ const CAMERA_KEY = [
 
 function on_load() {
     includeHTML();
-    hash_href()
+    // hash_href()
 }
 
 var editor;
