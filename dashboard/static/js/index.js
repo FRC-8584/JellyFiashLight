@@ -1,4 +1,5 @@
 const IMG_KEY = [
+    "enable",
     "brightness",
     "saturation",
     "contrast",
@@ -131,7 +132,9 @@ function request_camera() {
             let key = IMG_KEY[i];
             let target_element = document.getElementById(key);
             target_element.value = img_data[key];
-            slider_change(target_element, "", "%", 100);
+            if ("range-input" in target_element.classList) {
+                slider_change(target_element, "", "%", 100);
+            }
         }
         let camera_data = JSON.parse(xhr.responseText).config.camera;
         for (let i = 0; i < CAMERA_KEY.length; i++) {

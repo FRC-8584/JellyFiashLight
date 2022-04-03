@@ -70,6 +70,15 @@
     border-width: 50%;
 }
 
+#home .block .mode-block .option-name_1 {
+    flex: none;
+    color: rgb(180, 180, 180);
+    margin: 0;
+    font-size: 16px;
+    overflow: hidden;
+    padding-right: 24px;
+}
+
 #home .block .mode-block .mode-content {
     padding: 0 0 8px 0;
 }

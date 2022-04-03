@@ -28,6 +28,14 @@
                     <div id="preprocessing" class="mode-content">
                         <p class="cfont mode-title">影像前處理 (Image Preprocessing)</p>
                         <div class="option">
+                            <p class="option-name_1 cfont">啟用影像前處理 (Enable Image Preprocessing)</p>
+                            <input id="enable" class="switch-input" type="range" min="0" max="1" step="1" value="0" onclick="switch_input(this)">
+                        </div>
+                        <p class="cfont mode-remark">
+                            警告:本區功能極度消耗效能，請謹慎處理。<br>
+                            (Warning: The function in this area is extremely energy-consuming, please handle with caution.)
+                        </p>
+                        <div class="option">
                             <p class="option-name cfont">亮度 (Brightness)</p>
                             <input id="brightness" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>

@@ -20,14 +20,15 @@ class Camera():
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
-        self.camera_read_thread.start()
         self.load_config()
+        self.camera_read_thread.start()
 
     def load_config(self):
         image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
         camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
         if image_config:
             self.config = image_config
+            print(f"camera_{self.id} config reload.")
         if camera_config:
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
@@ -38,6 +39,12 @@ class Camera():
             self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
             self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
             self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
+            # if self.camera_read_thread.is_alive():
+            #     self.camera_read_thread.stop()
+            #     self.camera_read_thread.join()
+            #     self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
+            #     self.camera_read_thread.start()
+            print(f"camera_{self.id} camera reload.")
 
     def reload(self):
         if self.id == 0:
@@ -62,11 +69,12 @@ class Camera():
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
-                # img = self.highlight(img)
-                # img = self.brightness(img)
-                # img = self.contrast(img)
-                # img = self.modify_color_temperature(img)
-                # img = self.saturation(img)
+                if self.config.get("enable", 0) == 1:
+                    img = self.highlight(img)
+                    img = self.brightness(img)
+                    img = self.contrast(img)
+                    img = self.modify_color_temperature(img)
+                    img = self.saturation(img)
                 try:
                     img = self.camera_module.runPipeline(img)
                 except:

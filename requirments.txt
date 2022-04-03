@@ -1,5 +1,5 @@
-pynetworktables
 opencv-python
+pynetworktables
 numpy
 flask
 orjson
