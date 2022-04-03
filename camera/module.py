@@ -85,12 +85,11 @@ class Camera():
                 self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
             success, raw_img = self.camera.read()
             if success:
-                img = raw_img.copy()
-                img += self.highlight(raw_img)
-                img += self.brightness(raw_img)
-                img += self.contrast(raw_img)
-                img += self.modify_color_temperature(raw_img)
-                img += self.saturation(raw_img)
+                img = self.saturation(raw_img.copy())
+                img += self.highlight(raw_img.copy())
+                img += self.brightness(raw_img.copy())
+                img += self.contrast(raw_img.copy())
+                img += self.modify_color_temperature(raw_img.copy())
                 if self.code_enable:
                     try:
                         img = self.camera_func.runPipeline(img)
