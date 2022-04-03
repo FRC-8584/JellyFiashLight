@@ -59,11 +59,11 @@ class Camera():
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
-                img = self.highlight(img)
-                img = self.brightness(img)
-                img = self.contrast(img)
-                img = self.modify_color_temperature(img)
-                img = self.saturation(img)
+                # img = self.highlight(img)
+                # img = self.brightness(img)
+                # img = self.contrast(img)
+                # img = self.modify_color_temperature(img)
+                # img = self.saturation(img)
                 try:
                     img = self.camera_module.runPipeline(img)
                 except:
