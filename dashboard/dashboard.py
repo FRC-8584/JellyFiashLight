@@ -127,7 +127,9 @@ class Web_UI():
     def index():
         request_type = request.headers.get("Request-type")
         if request_type != None:
-            return deal_requeste(request_type, request.get_data(), request)
+            response = deal_requeste(request_type, request.get_data(), request)
+            print("Response:" + response)
+            return response
         return render_template("index.html")
 
     @app.route("/camera_0")
