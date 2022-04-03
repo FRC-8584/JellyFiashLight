@@ -29,6 +29,7 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
+            sleep(0.5)
             self.camera.release()
             self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
@@ -98,7 +99,7 @@ class Camera():
                     except:
                         sleep(5)
             except:
-                sleep(5)
+                sleep(2)
 
     # 調整亮度
     def brightness(self, r_img):
