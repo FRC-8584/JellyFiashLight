@@ -29,6 +29,8 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
+            self.camera.release()
+            self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
             self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
@@ -74,26 +76,29 @@ class Camera():
     # 讀取鏡頭
     def camera_read(self):
         while True:
-            success, raw_img = self.camera.read()
-            if success:
-                img = raw_img.copy()
-                if self.config.get("enable", 0) == 1:
-                    img = self.highlight(img)
-                    img = self.brightness(img)
-                    img = self.contrast(img)
-                    img = self.modify_color_temperature(img)
-                    img = self.saturation(img)
-                try:
-                    img = self.camera_module.runPipeline(img)
-                except:
-                    pass
-                self.img = img.copy()
-                self.frame = encode_jpeg(img.copy(), colorspace="bgr")
-            else:
-                try:
-                    self.camera = cv2.VideoCapture(self.id)
-                except:
-                    sleep(5)
+            try:
+                success, raw_img = self.camera.read()
+                if success:
+                    img = raw_img.copy()
+                    if self.config.get("enable", 0) == 1:
+                        img = self.highlight(img)
+                        img = self.brightness(img)
+                        img = self.contrast(img)
+                        img = self.modify_color_temperature(img)
+                        img = self.saturation(img)
+                    try:
+                        img = self.camera_module.runPipeline(img)
+                    except:
+                        pass
+                    self.img = img.copy()
+                    self.frame = encode_jpeg(img.copy(), colorspace="bgr")
+                else:
+                    try:
+                        self.camera = cv2.VideoCapture(self.id)
+                    except:
+                        sleep(5)
+            except:
+                sleep(5)
 
     # 調整亮度
     def brightness(self, r_img):
