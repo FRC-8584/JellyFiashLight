@@ -114,7 +114,7 @@ function camera_change() {
         camera_id = 0;
     }
     let img = document.getElementById("camera-stream");
-    img.src = "/camera_" + value + "?" + Date.now();
+    img.src = "/camera_" + camera_id + "?" + Date.now();
     request_camera();
     let hash = window.location.hash.replace("#", "");
     if (hash == "advance") {
