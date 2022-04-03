@@ -26,15 +26,14 @@ function on_load() {
 
 var editor;
 function import_monaco() {
-    let code = request_code()
     require.config({ paths: { vs: '../static/js/monaco-editor/min/vs' } });
     require(['vs/editor/editor.main'], function () {
         monaco.editor.setTheme('vs-dark');
         editor = monaco.editor.create(document.getElementById('monaco'), {
-            value: code,
             language: 'python'
         });
     });
+    request_code();
 }
 
 function hash_href() {
@@ -201,7 +200,6 @@ function request_code() {
             editor.setValue(code);
         }
         catch {}
-        return code;
     };
 }
 function send_code() {
