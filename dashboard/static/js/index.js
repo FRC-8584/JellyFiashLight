@@ -197,9 +197,12 @@ function request_code() {
     xhr.send(JSON.stringify(data));
     xhr.onload = function () {
         code = xhr.responseText;
-        editor.setValue(code);
+        try {
+            editor.setValue(code);
+        }
+        catch {}
+        return code;
     };
-    return code;
 }
 function send_code() {
     let camera_id
