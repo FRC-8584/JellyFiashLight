@@ -1,4 +1,5 @@
 import orjson
+from time import sleep
 
 class json:
     def dumps(data) -> str:
@@ -19,5 +20,5 @@ class json:
                     data = in_file.read()
                     in_file.close()
                 return orjson.loads(data)
-            except:
-                pass
+            except orjson.JSONDecodeError:
+                sleep(0.5)
