@@ -26,11 +26,12 @@ function on_load() {
 
 var editor;
 function import_monaco() {
+    let code = request_code()
     require.config({ paths: { vs: '../static/js/monaco-editor/min/vs' } });
     require(['vs/editor/editor.main'], function () {
         monaco.editor.setTheme('vs-dark');
         editor = monaco.editor.create(document.getElementById('monaco'), {
-            value: request_code(),
+            value: code,
             language: 'python'
         });
     });
