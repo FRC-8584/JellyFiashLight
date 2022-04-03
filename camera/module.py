@@ -15,6 +15,7 @@ import camera.camera_4 as camera_4
 class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
+        self.camera_reading = True
         self.reload()
         self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
@@ -28,7 +29,9 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
+            print(f"Camera {self.id} load config start")
             if self.camera_read_thread.is_alive():
+                self.camera_reading = False
                 self.camera_read_thread.stop()
                 self.camera_read_thread.join()
             self.camera.release()
@@ -42,7 +45,7 @@ class Camera():
             self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
             self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
             self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
-            print(f"Camera {self.id} load config")
+            print(f"Camera {self.id} load config finish")
             print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
             print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
             print(self.camera.get(cv2.CAP_PROP_FPS))
@@ -52,6 +55,7 @@ class Camera():
             print(self.camera.get(cv2.CAP_PROP_HUE))
             print(self.camera.get(cv2.CAP_PROP_GAIN))
             print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
+            self.camera_reading = True
             self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{self.id}")
             self.camera_read_thread.start()
 
@@ -74,7 +78,7 @@ class Camera():
 
     # 讀取鏡頭
     def camera_read(self):
-        while True:
+        while self.camera_reading:
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
