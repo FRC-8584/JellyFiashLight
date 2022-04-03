@@ -55,10 +55,11 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                 with open(f"camera/camera_{camera_id}.py", mode="w") as code_file:
                     code_file.write(code)
                     code_file.close()
-                camera_list[camera_id].reload()
                 config = json.load(f"data/camera_{camera_id}.json")
                 config["code"] = enable
                 json.dump(f"data/camera_{camera_id}.json", config)
+                camera_list[camera_id].reload()
+                camera_list[camera_id].load_config()
         except:
             pass
     return ("", 204)
