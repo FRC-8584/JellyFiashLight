@@ -119,6 +119,10 @@
                             <p class="option-unit cfont">N/A</p>
                         </div>
                     </div>
+                    <div class="option">
+                        <button id="save-config" class="cfont" onclick="send_camera()">保存 (Save)</button>
+                        <button id="reset-config" class="cfont" onclick="request_camera()">重置 (Reset)</button>
+                    </div>
                 </div>
                 <div id="basic" class="mode-block not-display">
                     <div id="detection" class="mode-content">
@@ -158,8 +162,8 @@
                         </p>
                         <div id="monaco"></div>
                         <div class="option">
-                            <button id="save-code" class="cfont">保存 (Save)</button>
-                            <button id="reset-code" class="cfont">重置 (Reset)</button>
+                            <button id="save-code" class="cfont" onclick="send_code()">保存 (Save)</button>
+                            <button id="reset-code" class="cfont" onclick="send_code()">重置 (Reset)</button>
                         </div>
                     </div>
                 </div>
@@ -168,10 +172,10 @@
             <div class="block">
                 <p class="cfont block-title">輸出畫面 (Ouput Screen)</p>
                 <img id="camera-stream">
-                <p class="cfont block-title">終端機輸出 (Console Ouput)</p>
+                <!-- <p class="cfont block-title">終端機輸出 (Console Ouput)</p>
                 <div id="console-output">
                     <textarea id="console-content" class="cfont" disabled></textarea>
-                </div>
+                </div> -->
             </div>
         </div>
         <div id="settings" class="index flex-display not-display">

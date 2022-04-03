@@ -53,6 +53,7 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                 with open(f"camera/camera_{camera_id}.py", mode="w") as code_file:
                     code_file.write(code)
                     code_file.close()
+                camera_list[camera_id].reload()
         except:
             pass
     return ("", 204)

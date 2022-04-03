@@ -152,3 +152,29 @@
 #home .block .mode-block .mode-content .option input[type="number"]::-webkit-inner-spin-button {
     appearance: none;
 }
+
+#home .block .mode-block .option #save-config,
+#home .block .mode-block .option #reset-config {
+    width: 90px;
+    height: 30px;
+    background-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    border-color: rgb(62, 62, 62);
+    border-radius: 5px;
+    color: rgb(62, 62, 62);
+    margin: 12px 0;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+#home .block .mode-block .option #save-config {
+    margin-right: 8px;
+}
+#home .block .mode-block .option #save-config:hover {
+    border-color: rgb(180, 180, 180);
+    color: rgb(180, 180, 180);
+}
+#home .block .mode-block .option #reset-config:hover {
+    border-color: rgb(254, 78, 69);
+    color: rgb(254, 78, 69);
+}

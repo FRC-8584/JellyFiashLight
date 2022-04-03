@@ -92,6 +92,9 @@ function slider_change(obj, before="", after="", percent=0) {
         value_pre = percent * obj.value / obj.max;
         value_pre = value_pre.toFixed(2);
     }
+    if (value_pre == 0) {
+        value_pre = 0;
+    }
     obj.nextElementSibling.textContent = before + value_pre + after;
 }
 function slider_reset(obj, value=0) {
@@ -99,9 +102,7 @@ function slider_reset(obj, value=0) {
     try {
         obj.oninput()
     }
-    catch {
-        
-    }
+    catch {}
 }
 
 function camera_change() {
@@ -137,9 +138,10 @@ function request_camera() {
             let key = IMG_KEY[i];
             let target_element = document.getElementById(key);
             target_element.value = img_data[key];
-            if ("range-input" in target_element.classList) {
-                slider_change(target_element, "", "%", 100);
+            try {
+                target_element.oninput()
             }
+            catch {}
         }
         let camera_data = JSON.parse(xhr.responseText).config.camera;
         for (let i = 0; i < CAMERA_KEY.length; i++) {
@@ -171,6 +173,41 @@ function send_camera() {
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("Request-type", "send_camera");
+    xhr.send(JSON.stringify(data));
+}
+
+function request_code() {
+    let camera_id
+    try {
+        camera_id = document.getElementById("camera-select").value;
+    }
+    catch {
+        camera_id = 0;
+    }
+    let data = {"camera-id": parseFloat(camera_id)};
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Request-type", "request_code");
+    xhr.send(JSON.stringify(data));
+    xhr.onload = function () {
+        let code = xhr.responseText;
+        editor.setValue(code);
+    };
+}
+function send_code() {
+    let camera_id
+    try {
+        camera_id = document.getElementById("camera-select").value;;
+    }
+    catch {
+        camera_id = 0;
+    }
+    let data = {"camera-id": parseFloat(camera_id), "code":editor.getValue()};
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "/", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.setRequestHeader("Request-type", "send_code");
     xhr.send(JSON.stringify(data));
 }
 

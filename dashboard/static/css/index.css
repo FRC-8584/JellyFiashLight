@@ -33,7 +33,7 @@ a {
     border-color: rgb(62, 62, 62);
     border-radius: 10px;
 }
-#home #console-output {
+/* #home #console-output {
     border-style: solid;
     border-width: 1px;
     border-color: rgb(62, 62, 62);
@@ -56,4 +56,4 @@ a {
 }
 #home #console-content::-webkit-resizer {
     appearance: none
-}
+} */
