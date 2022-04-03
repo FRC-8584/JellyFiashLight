@@ -29,15 +29,6 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
-            self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
-            self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
-            self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
-            self.camera.set(cv2.CAP_PROP_BRIGHTNESS, camera_config.get("brightness", 0))
-            self.camera.set(cv2.CAP_PROP_CONTRAST, camera_config.get("contrast", 0))
-            self.camera.set(cv2.CAP_PROP_SATURATION, camera_config.get("saturation", 0))
-            self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
-            self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
-            self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
             print(f"Camera {self.id} load config")
             print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
             print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
@@ -48,6 +39,15 @@ class Camera():
             print(self.camera.get(cv2.CAP_PROP_HUE))
             print(self.camera.get(cv2.CAP_PROP_GAIN))
             print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
+            self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
+            self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
+            self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
+            self.camera.set(cv2.CAP_PROP_BRIGHTNESS, camera_config.get("brightness", 0))
+            self.camera.set(cv2.CAP_PROP_CONTRAST, camera_config.get("contrast", 0))
+            self.camera.set(cv2.CAP_PROP_SATURATION, camera_config.get("saturation", 0))
+            self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
+            self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
+            self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
             # if self.camera_read_thread.is_alive():
             #     self.camera_read_thread.stop()
             #     self.camera_read_thread.join()
