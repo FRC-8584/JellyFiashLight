@@ -20,7 +20,7 @@ const CAMERA_KEY = [
 
 function on_load() {
     includeHTML();
-    // hash_href()
+    hash_href()
 }
 
 var editor;
@@ -50,7 +50,7 @@ function hash_href() {
         case "global":
         case "basic":
         case "advance":
-            camera_change()
+            // camera_change()
             home.classList.remove("not-display");
             setting.classList.add("not-display");
             switch (hash) {
