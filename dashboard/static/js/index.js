@@ -30,7 +30,7 @@ function import_monaco() {
     require(['vs/editor/editor.main'], function () {
         monaco.editor.setTheme('vs-dark');
         editor = monaco.editor.create(document.getElementById('monaco'), {
-            value: "print(\"Hello World!\")",
+            value: request_code(),
             language: 'python'
         });
     });
@@ -51,7 +51,6 @@ function hash_href() {
         case "global":
         case "basic":
         case "advance":
-            camera_change()
             home.classList.remove("not-display");
             setting.classList.add("not-display");
             switch (hash) {
@@ -75,6 +74,7 @@ function hash_href() {
                     }
                     break;
             }
+            camera_change()
             break;
         case "settings":
             setting.classList.remove("not-display");
@@ -116,6 +116,10 @@ function camera_change() {
     let img = document.getElementById("camera-stream");
     img.src = "/camera_" + value + "?" + Date.now();
     request_camera()
+    let hash = window.location.hash.replace("#", "");
+    if (hash == "advance") {
+        request_code()
+    }
 }
 
 function request_camera() {
@@ -177,7 +181,7 @@ function send_camera() {
 }
 
 function request_code() {
-    let camera_id
+    let camera_id, code;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
@@ -191,9 +195,10 @@ function request_code() {
     xhr.setRequestHeader("Request-type", "request_code");
     xhr.send(JSON.stringify(data));
     xhr.onload = function () {
-        let code = xhr.responseText;
+        code = xhr.responseText;
         editor.setValue(code);
     };
+    return code;
 }
 function send_code() {
     let camera_id
