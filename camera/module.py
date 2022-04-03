@@ -16,7 +16,7 @@ class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
         self.reload()
-        self.img = np.zeros((320, 640, 3), dtype=np.uint8)
+        self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
@@ -28,7 +28,6 @@ class Camera():
         camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
         if image_config:
             self.config = image_config
-            print(f"camera_{self.id} config reload.")
         if camera_config:
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
@@ -44,7 +43,6 @@ class Camera():
             #     self.camera_read_thread.join()
             #     self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
             #     self.camera_read_thread.start()
-            print(f"camera_{self.id} camera reload.")
 
     def reload(self):
         if self.id == 0:
