@@ -69,14 +69,16 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
 
                 response = make_response()
                 with open(f"camera/camera_{camera_id}/config_{config_id}.py") as code_file:
-                    response.set_data(
-                        json.dumps(
+                    data = json.dumps(
                             {
                                 "code": code_file.read(),
                                 "enable": origin_data["config_list"][config_id]["code"]
                             }
                         )
+                    response.set_data(
+                        data
                     )
+                    print(data)
                     code_file.close()
 
                 camera_list[camera_id].reload()
@@ -127,12 +129,7 @@ class Web_UI():
     def index():
         request_type = request.headers.get("Request-type")
         if request_type != None:
-            response = deal_requeste(request_type, request.get_data(), request)
-            try:
-                print("Response:" + response.data)
-            except:
-                pass
-            return response
+            return deal_requeste(request_type, request.get_data(), request)
         return render_template("index.html")
 
     @app.route("/camera_0")
