@@ -31,6 +31,8 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
+            print(f"Camera {self.id} load config start:")
+            print(camera_config)
             self.camera.release()
             self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
