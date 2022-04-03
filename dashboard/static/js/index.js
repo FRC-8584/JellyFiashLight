@@ -95,7 +95,6 @@ function slider_change(obj, before="", after="", percent=0) {
         value_pre = 0;
     }
     obj.nextElementSibling.textContent = before + value_pre + after;
-    send_camera()
 }
 function slider_reset(obj, value=0) {
     obj.value = value;
