@@ -24,12 +24,12 @@ class Camera():
         self.camera_read_thread.start()
 
     def load_config(self):
+        sleep(1)
         image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
         camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
         if image_config:
             self.config = image_config
         if camera_config:
-            sleep(0.5)
             self.camera.release()
             self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
@@ -51,11 +51,6 @@ class Camera():
             print(self.camera.get(cv2.CAP_PROP_HUE))
             print(self.camera.get(cv2.CAP_PROP_GAIN))
             print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
-            # if self.camera_read_thread.is_alive():
-            #     self.camera_read_thread.stop()
-            #     self.camera_read_thread.join()
-            #     self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
-            #     self.camera_read_thread.start()
 
     def reload(self):
         if self.id == 0:
