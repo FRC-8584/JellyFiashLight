@@ -29,7 +29,7 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             camera_config = data["config"]
             if camera_id in range(5):
                 json.dump(f"data/camera_{camera_id}.json", camera_config)
-                camera_list[camera_id].load_config()
+                camera_list[camera_id].load_config(camera_config=camera_config["camera"])
         except:
             pass
     elif type_of == "request_code":

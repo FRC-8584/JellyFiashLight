@@ -23,10 +23,11 @@ class Camera():
         self.load_config()
         self.camera_read_thread.start()
 
-    def load_config(self):
-        sleep(1)
-        image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
-        camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
+    def load_config(self, image_config=None, camera_config=None):
+        if image_config == None:
+            image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
+        if camera_config == None:
+            camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
         if image_config:
             self.config = image_config
         if camera_config:
