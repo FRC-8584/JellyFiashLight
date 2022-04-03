@@ -56,9 +56,20 @@ class Camera():
     # 讀取鏡頭
     def camera_read(self):
         while True:
-            success, img = self.camera.read()
+            success, raw_img = self.camera.read()
             if success:
+                img = raw_img.copy()
+                img = self.highlight(img)
+                img = self.brightness(img)
+                img = self.contrast(img)
+                img = self.modify_color_temperature(img)
+                img = self.saturation(img)
+                try:
+                    img = self.camera_module.runPipeline(img)
+                except:
+                    pass
                 self.img = img
+                self.frame = encode_jpeg(img.copy(), colorspace="bgr")
             else:
                 try:
                     self.camera = cv2.VideoCapture(self.id)
@@ -159,20 +170,7 @@ class Camera():
 
     def output(self):
         while True:
-            img = self.img.copy()
-            img = self.highlight(img)
-            img = self.brightness(img)
-            img = self.contrast(img)
-            img = self.modify_color_temperature(img)
-            img = self.saturation(img)
-
-            try:
-                img = self.camera_module.runPipeline(img)
-            except:
-                pass
-
-            frame = encode_jpeg(img.copy(), colorspace="bgr")
-            yield (b"--frame\r\nContent-Type:image/jpeg\r\n\r\n" + frame + b"\r\n")
+            yield (b"--frame\r\nContent-Type:image/jpeg\r\n\r\n" + self.frame + b"\r\n")
 
 def show(img):
     cv2.imshow("", img)
