@@ -98,7 +98,7 @@ class Camera():
                     except:
                         sleep(5)
             except:
-                sleep(3)
+                sleep(5)
 
     # 調整亮度
     def brightness(self, r_img):
