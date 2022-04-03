@@ -32,8 +32,8 @@ function import_monaco() {
         editor = monaco.editor.create(document.getElementById('monaco'), {
             language: 'python'
         });
+        request_code();
     });
-    request_code();
 }
 
 function hash_href() {
