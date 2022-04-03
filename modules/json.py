@@ -13,7 +13,11 @@ class json:
             in_file.close()
 
     def load(file: str):
-        with open(file, mode='r') as in_file:
-            data = in_file.read()
-            in_file.close()
-        return orjson.loads(data)
+        while True:
+            try:
+                with open(file, mode='r') as in_file:
+                    data = in_file.read()
+                    in_file.close()
+                return orjson.loads(data)
+            except:
+                pass
