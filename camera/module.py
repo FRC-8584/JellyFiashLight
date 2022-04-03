@@ -5,6 +5,7 @@ from importlib import reload
 from time import sleep
 import cv2, math, numpy as np
 from simplejpeg import encode_jpeg
+from queue import Queue
 
 import camera.camera_0 as camera_0
 import camera.camera_1 as camera_1
@@ -19,6 +20,7 @@ class Camera():
         self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
+        self.camera_queue = Queue()
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
         self.load_config()
         self.camera_read_thread.start()
@@ -31,30 +33,7 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
-            print(f"Camera {self.id} load config start:")
-            print(camera_config)
-            self.camera.release()
-            self.camera = cv2.VideoCapture(self.id)
-            sleep(3)
-            self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
-            self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
-            self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
-            self.camera.set(cv2.CAP_PROP_BRIGHTNESS, camera_config.get("brightness", 0))
-            self.camera.set(cv2.CAP_PROP_CONTRAST, camera_config.get("contrast", 0))
-            self.camera.set(cv2.CAP_PROP_SATURATION, camera_config.get("saturation", 0))
-            self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
-            self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
-            self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
-            print(f"Camera {self.id} load config")
-            print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
-            print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
-            print(self.camera.get(cv2.CAP_PROP_FPS))
-            print(self.camera.get(cv2.CAP_PROP_BRIGHTNESS))
-            print(self.camera.get(cv2.CAP_PROP_CONTRAST))
-            print(self.camera.get(cv2.CAP_PROP_SATURATION))
-            print(self.camera.get(cv2.CAP_PROP_HUE))
-            print(self.camera.get(cv2.CAP_PROP_GAIN))
-            print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
+            self.camera_queue.put(camera_config)
 
     def reload(self):
         if self.id == 0:
@@ -76,29 +55,49 @@ class Camera():
     # 讀取鏡頭
     def camera_read(self):
         while True:
-            try:
-                success, raw_img = self.camera.read()
-                if success:
-                    img = raw_img.copy()
-                    if self.config.get("enable", 0) == 1:
-                        img = self.highlight(img)
-                        img = self.brightness(img)
-                        img = self.contrast(img)
-                        img = self.modify_color_temperature(img)
-                        img = self.saturation(img)
-                    try:
-                        img = self.camera_module.runPipeline(img)
-                    except:
-                        pass
-                    self.img = img.copy()
-                    self.frame = encode_jpeg(img.copy(), colorspace="bgr")
-                else:
-                    try:
-                        self.camera = cv2.VideoCapture(self.id)
-                    except:
-                        sleep(5)
-            except:
-                sleep(5)
+            if not self.camera_queue.empty():
+                camera_config: dict = self.camera_queue.get()
+                self.camera.release()
+                self.camera = cv2.VideoCapture(self.id)
+                self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
+                self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
+                self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
+                self.camera.set(cv2.CAP_PROP_BRIGHTNESS, camera_config.get("brightness", 0))
+                self.camera.set(cv2.CAP_PROP_CONTRAST, camera_config.get("contrast", 0))
+                self.camera.set(cv2.CAP_PROP_SATURATION, camera_config.get("saturation", 0))
+                self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
+                self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
+                self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
+                print(f"Camera {self.id} load config")
+                print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
+                print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
+                print(self.camera.get(cv2.CAP_PROP_FPS))
+                print(self.camera.get(cv2.CAP_PROP_BRIGHTNESS))
+                print(self.camera.get(cv2.CAP_PROP_CONTRAST))
+                print(self.camera.get(cv2.CAP_PROP_SATURATION))
+                print(self.camera.get(cv2.CAP_PROP_HUE))
+                print(self.camera.get(cv2.CAP_PROP_GAIN))
+                print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
+            success, raw_img = self.camera.read()
+            if success:
+                img = raw_img.copy()
+                if self.config.get("enable", 0) == 1:
+                    img = self.highlight(img)
+                    img = self.brightness(img)
+                    img = self.contrast(img)
+                    img = self.modify_color_temperature(img)
+                    img = self.saturation(img)
+                try:
+                    img = self.camera_module.runPipeline(img)
+                except:
+                    pass
+                self.img = img.copy()
+                self.frame = encode_jpeg(img.copy(), colorspace="bgr")
+            else:
+                try:
+                    self.camera = cv2.VideoCapture(self.id)
+                except:
+                    sleep(5)
 
     # 調整亮度
     def brightness(self, r_img):
