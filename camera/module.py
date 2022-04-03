@@ -30,6 +30,8 @@ class Camera():
             image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
         if camera_config == None:
             camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
+        self.code_enable: bool = json.load(f"data/camera_{self.id}.json").get("code", False)
+        
         if image_config:
             self.config = image_config
         if camera_config:
@@ -76,10 +78,14 @@ class Camera():
                 img = self.contrast(img)
                 img = self.modify_color_temperature(img)
                 img = self.saturation(img)
-                try:
-                    img = self.camera_module.runPipeline(img)
-                except:
+                if self.code_enable:
+                    try:
+                        img = self.camera_module.runPipeline(img)
+                    except:
+                        pass
+                else:
                     pass
+                    # GRIP
                 self.img = img.copy()
                 self.frame = encode_jpeg(img.copy(), colorspace="bgr")
             else:
