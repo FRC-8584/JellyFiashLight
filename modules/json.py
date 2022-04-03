@@ -21,4 +21,4 @@ class json:
                     in_file.close()
                 return orjson.loads(data)
             except orjson.JSONDecodeError:
-                sleep(0.5)
+                sleep(0.1)

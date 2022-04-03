@@ -49,7 +49,9 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             if camera_id in range(5) and config_id in range(10):
                 origin_data = json.load(f"data/camera_{camera_id}.json")
                 origin_data["config_id"] = config_id
+                enable = origin_data["config_list"][config_id]["enable"]
                 origin_data["config_list"][config_id] = data["config"]
+                origin_data["config_list"][config_id]["enable"] = enable
                 json.dump(f"data/camera_{camera_id}.json", origin_data)
 
                 camera_list[camera_id].reload()
