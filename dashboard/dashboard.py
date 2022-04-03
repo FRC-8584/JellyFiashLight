@@ -72,21 +72,21 @@ class Web_UI():
             return deal_requeste(request_type, request.get_data(), request)
         return render_template("index.html")
 
-    @app.route("/camera_0")
-    def camera_0_r():
-        return Response(camera_list[0].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    @app.route("/camera_1")
-    def camera_1_r():
-        return Response(camera_list[1].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    @app.route("/camera_2")
-    def camera_2_r():
-        return Response(camera_list[2].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    @app.route("/camera_3")
-    def camera_3_r():
-        return Response(camera_list[3].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    @app.route("/camera_4")
-    def camera_4_r():
-        return Response(camera_list[4].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # @app.route("/camera_0")
+    # def camera_0_r():
+    #     return Response(camera_list[0].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # @app.route("/camera_1")
+    # def camera_1_r():
+    #     return Response(camera_list[1].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # @app.route("/camera_2")
+    # def camera_2_r():
+    #     return Response(camera_list[2].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # @app.route("/camera_3")
+    # def camera_3_r():
+    #     return Response(camera_list[3].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    # @app.route("/camera_4")
+    # def camera_4_r():
+    #     return Response(camera_list[4].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def run(
         self,

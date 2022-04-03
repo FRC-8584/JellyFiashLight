@@ -17,6 +17,7 @@ class Camera():
         self.id = id
         self.reload()
         self.img = np.zeros((320, 640, 3), dtype=np.uint8)
+        self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
         self.camera_read_thread.start()
