@@ -1,7 +1,4 @@
 @import url(global_setting.css);
-@import url(home-setting.css);
-@import url(side-bar.css);
-@import url(top-bar.css);
 
 .flex-display {
     display: flex;
