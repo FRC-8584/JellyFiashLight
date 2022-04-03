@@ -82,7 +82,7 @@
                         </div>
                         <div class="option">
                             <p class="option-name cfont">亮度 (Brightness)</p>
-                            <input id="camera-brightness" class="range-input" type="range" min="0" max="100" step="1" value="50" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
+                            <input id="camera-brightness" class="range-input" type="range" min="0" max="100" step="1" value="50" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 50)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
@@ -146,7 +146,7 @@
                         <p class="cfont mode-title">程式區塊 (Coding Block)</p>
                         <div class="option">
                             <p class="option-name cfont">啟用程式區塊 (Enable Coding Block)</p>
-                            <input id="enable-code" class="switch-input" type="range" min="0" max="1" step="1" value="0" onclick="switch_input(this)">
+                            <input id="enable-code" class="switch-input" type="range" min="0" max="1" step="1" value="0" onclick="switch_input(this)" onchange="send_code()">
                         </div>
                         <p class="cfont mode-remark">
                             啟用此項設定後將停用基礎設定中的辨識設定。<br>

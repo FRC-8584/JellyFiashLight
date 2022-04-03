@@ -9,55 +9,100 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
         print(f"Data:{data.decode('utf-8')}")
     except:
         print(f"Data:{data}")
+
+
     if type_of == "include":
         return render_template(json.loads(data).get("file_name"))
+    
     elif type_of == "request_camera":
         try:
             data = raw_requests.get_json()
-            camera_id = int(data.get("camera-id", False))
-            if camera_id in range(5):
-                data = json.load(f"data/camera_{camera_id}.json")
+            camera_id = int(data.get("camera-id", -1))
+            config_id = int(data.get("config-id", -1))
+            if camera_id in range(5) and config_id in range(10):
+                origin_data = json.load(f"data/camera_{camera_id}.json")
+                origin_data["config_id"] = config_id
+                json.dump(f"data/camera_{camera_id}.json", origin_data)
+
                 response = make_response()
-                response.set_data(json.dumps({"camera-id": camera_id, "config": data}))
+                response.set_data(
+                    json.dumps(
+                        {
+                            "camera-id": camera_id,
+                            "config": origin_data["config_list"][config_id]
+                        }
+                    )
+                )
+
+                camera_list[camera_id].reload()
+                camera_list[camera_id].load_config()
+
                 return response
         except:
             pass
+    
     elif type_of == "send_camera":
         try:
             data = raw_requests.get_json()
-            camera_id = int(data.get("camera-id", False))
-            camera_config = data["config"]
-            if camera_id in range(5):
-                json.dump(f"data/camera_{camera_id}.json", camera_config)
-                camera_list[camera_id].load_config(camera_config=camera_config["camera"])
+            camera_id = int(data.get("camera-id", -1))
+            config_id = int(data.get("config-id", -1))
+            if camera_id in range(5) and config_id in range(10):
+                origin_data = json.load(f"data/camera_{camera_id}.json")
+                origin_data["config_id"] = config_id
+                origin_data["config_list"][config_id] = data["config"]
+                json.dump(f"data/camera_{camera_id}.json", origin_data)
+
+                camera_list[camera_id].reload()
+                camera_list[camera_id].load_config()
         except:
             pass
+
     elif type_of == "request_code":
         try:
             data = raw_requests.get_json()
-            camera_id = data.get("camera-id", False)
-            if camera_id in range(5):
+            camera_id = int(data.get("camera-id", -1))
+            config_id = int(data.get("config-id", -1))
+            if camera_id in range(5) and config_id in range(10):
+                origin_data = json.load(f"data/camera_{camera_id}.json")
+                origin_data["config_id"] = config_id
+                json.dump(f"data/camera_{camera_id}.json", origin_data)
+
                 response = make_response()
-                enable = json.load(f"data/camera_{camera_id}.json")["code"]
-                with open(f"camera/camera_{camera_id}.py", mode="r") as code_file:
-                    response.set_data(json.dumps({"code": code_file.read(), "enable": enable}))
+                with open(f"camera/camera_{camera_id}/config_{config_id}.py") as code_file:
+                    response.set_data(
+                        json.dumps(
+                            {
+                                "code": code_file.read(),
+                                "enable": origin_data["config_list"][config_id]["code"]
+                            }
+                        )
+                    )
                     code_file.close()
+
+                camera_list[camera_id].reload()
+                camera_list[camera_id].load_config()
+
                 return response
         except:
             pass
+    
     elif type_of == "send_code":
         try:
             data = raw_requests.get_json()
-            camera_id = data.get("camera-id", False)
-            code = data["code"]
-            enable = data["enable"]
-            if camera_id in range(5):
-                with open(f"camera/camera_{camera_id}.py", mode="w") as code_file:
+            camera_id = int(data.get("camera-id", -1))
+            config_id = int(data.get("config-id", -1))
+            if camera_id in range(5) and config_id in range(10):
+                code = data["code"]
+                enable = data["enable"]
+                with open(f"camera/camera_{camera_id}/config_{config_id}.py", mode="w") as code_file:
                     code_file.write(code)
                     code_file.close()
-                config = json.load(f"data/camera_{camera_id}.json")
-                config["code"] = enable
-                json.dump(f"data/camera_{camera_id}.json", config)
+
+                origin_data = json.load(f"data/camera_{camera_id}.json")
+                origin_data["config_id"] = config_id
+                origin_data["config_list"][config_id]["code"] = enable
+                json.dump(f"data/camera_{camera_id}.json", origin_data)
+
                 camera_list[camera_id].reload()
                 camera_list[camera_id].load_config()
         except:

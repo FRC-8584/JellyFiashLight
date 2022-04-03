@@ -106,12 +106,12 @@ function slider_reset(obj, value=0) {
 }
 
 function camera_change() {
-    let value;
+    let camera_id;
     try {
-        value = document.getElementById("camera-select").value;
+        camera_id = document.getElementById("camera-select").value;
     }
     catch {
-        value = 0;
+        camera_id = 0;
     }
     let img = document.getElementById("camera-stream");
     img.src = "/camera_" + value + "?" + Date.now();
@@ -123,14 +123,23 @@ function camera_change() {
 }
 
 function request_camera() {
-    let camera_id;
+    let camera_id, config_id;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
     }
-    let data = {"camera-id": parseFloat(camera_id)};
+    try {
+        config_id = document.getElementById("config-select").value;
+    }
+    catch {
+        config_id = 0;
+    }
+    let data = {
+        "camera-id": parseInt(camera_id),
+        "config-id": parseInt(config_id),
+    };
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");
@@ -155,14 +164,27 @@ function request_camera() {
     };
 }
 function send_camera() {
-    let camera_id;
+    let camera_id, config_id;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
     }
-    let data = {"camera-id": parseFloat(camera_id), "config":{"image":{}, "camera":{}}};
+    try {
+        config_id = document.getElementById("config-select").value;
+    }
+    catch {
+        config_id = 0;
+    }
+    let data = {
+        "camera-id": parseInt(camera_id),
+        "config-id": parseInt(config_id),
+        "config":{
+            "image":{},
+            "camera":{}
+        }
+    };
     for (let i = 0; i < IMG_KEY.length; i++) {
         let key = IMG_KEY[i];
         let value = document.getElementById(key).value;
@@ -181,14 +203,23 @@ function send_camera() {
 }
 
 function request_code() {
-    let camera_id, code;
+    let camera_id, config_id;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
     }
-    let data = {"camera-id": parseFloat(camera_id)};
+    try {
+        config_id = document.getElementById("config-select").value;
+    }
+    catch {
+        config_id = 0;
+    }
+    let data = {
+        "camera-id": parseInt(camera_id),
+        "config-id": parseInt(config_id),
+    };
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");
@@ -205,18 +236,24 @@ function request_code() {
             switch_element.value = 1;
         }
         else {
-            switch_element.value = 1;
+            switch_element.value = 0;
         }
         switch_element.onclick();
     };
 }
 function send_code() {
-    let camera_id, enable;
+    let camera_id, config_id, enable;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
+    }
+    try {
+        config_id = document.getElementById("config-select").value;
+    }
+    catch {
+        config_id = 0;
     }
     if (document.getElementById("enable-code").value == 0) {
         enable = false;
@@ -224,7 +261,12 @@ function send_code() {
     else {
         enable = true;
     }
-    let data = {"camera-id": parseFloat(camera_id), "code":editor.getValue(), "enable": enable};
+    let data = {
+        "camera-id": parseInt(camera_id),
+        "config-id": parseInt(config_id),
+        "code": editor.getValue(),
+        "enable": enable
+    };
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");

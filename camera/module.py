@@ -7,30 +7,38 @@ import cv2, math, numpy as np
 from simplejpeg import encode_jpeg
 from queue import Queue
 
-import camera.camera_0 as camera_0
-import camera.camera_1 as camera_1
-import camera.camera_2 as camera_2
-import camera.camera_3 as camera_3
-import camera.camera_4 as camera_4
+import camera.camera_0
+import camera.camera_1
+import camera.camera_2
+import camera.camera_3
+import camera.camera_4
+
+MODULE_LIST = [
+    camera.camera_0,
+    camera.camera_1,
+    camera.camera_2,
+    camera.camera_3,
+    camera.camera_4
+]
 
 class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
+        self.camera_module = MODULE_LIST[id]
+        self.camera_queue = Queue()
+        self.load_config()
         self.reload()
         self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
-        self.camera_queue = Queue()
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
-        self.load_config()
         self.camera_read_thread.start()
 
-    def load_config(self, image_config=None, camera_config=None):
-        if image_config == None:
-            image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
-        if camera_config == None:
-            camera_config: dict = json.load(f"data/camera_{self.id}.json").get("camera", False)
-        self.code_enable: bool = json.load(f"data/camera_{self.id}.json").get("code", False)
+    def load_config(self):
+        self.config_id = json.load(f"data/camera_{self.id}.json").get("config_id", 0)
+        image_config: dict = json.load(f"data/camera_{self.id}.json")["config_list"][self.config_id].get("image", False)
+        camera_config: dict = json.load(f"data/camera_{self.id}.json")["config_list"][self.config_id].get("camera", False)
+        self.code_enable: bool = json.load(f"data/camera_{self.id}.json")["config_list"][self.config_id].get("code", False)
         
         if image_config:
             self.config = image_config
@@ -38,21 +46,26 @@ class Camera():
             self.camera_queue.put(camera_config)
 
     def reload(self):
-        if self.id == 0:
-            reload(camera_0)
-            self.camera_module = camera_0
+        if self.config_id == 0:
+            self.camera_func = reload(self.camera_module.config_0)
         elif self.id == 1:
-            reload(camera_1)
-            self.camera_module = camera_1
+            self.camera_func = reload(self.camera_module.config_1)
         elif self.id == 2:
-            reload(camera_2)
-            self.camera_module = camera_2
+            self.camera_func = reload(self.camera_module.config_2)
         elif self.id == 3:
-            reload(camera_3)
-            self.camera_module = camera_3
+            self.camera_func = reload(self.camera_module.config_3)
         elif self.id == 4:
-            reload(camera_4)
-            self.camera_module = camera_4
+            self.camera_func = reload(self.camera_module.config_4)
+        elif self.id == 5:
+            self.camera_func = reload(self.camera_module.config_5)
+        elif self.id == 6:
+            self.camera_func = reload(self.camera_module.config_6)
+        elif self.id == 7:
+            self.camera_func = reload(self.camera_module.config_7)
+        elif self.id == 8:
+            self.camera_func = reload(self.camera_module.config_8)
+        elif self.id == 9:
+            self.camera_func = reload(self.camera_module.config_9)
 
     # 讀取鏡頭
     def camera_read(self):
@@ -80,7 +93,7 @@ class Camera():
                 img = self.saturation(img)
                 if self.code_enable:
                     try:
-                        img = self.camera_module.runPipeline(img)
+                        img = self.camera_func.runPipeline(img)
                     except:
                         pass
                 else:
