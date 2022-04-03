@@ -128,7 +128,10 @@ class Web_UI():
         request_type = request.headers.get("Request-type")
         if request_type != None:
             response = deal_requeste(request_type, request.get_data(), request)
-            print("Response:" + response)
+            try:
+                print("Response:" + response.data)
+            except:
+                pass
             return response
         return render_template("index.html")
 
