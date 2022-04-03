@@ -16,7 +16,7 @@ class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
         self.reload()
-        self.img = np.zeros((640, 480, 3), dtype=np.uint8)
+        self.img = np.zeros((480, 640, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
@@ -29,8 +29,6 @@ class Camera():
             self.config = image_config
         if camera_config:
             print(f"Camera {self.id} load config start")
-            self.camera.release()
-            self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
             self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
