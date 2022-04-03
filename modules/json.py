@@ -14,11 +14,15 @@ class json:
             in_file.close()
 
     def load(file: str):
-        while True:
+        for i in range(5):
             try:
                 with open(file, mode='r') as in_file:
                     data = in_file.read()
                     in_file.close()
                 return orjson.loads(data)
             except orjson.JSONDecodeError:
-                sleep(0.1)
+                sleep(0.02)
+        with open(file, mode='r') as in_file:
+            data = in_file.read()
+            in_file.close()
+        return orjson.loads(data)
