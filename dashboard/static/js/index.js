@@ -96,7 +96,12 @@ function slider_change(obj, before="", after="", percent=0) {
 }
 function slider_reset(obj, value=0) {
     obj.value = value;
-    slider_change(obj);
+    try {
+        obj.oninput()
+    }
+    catch {
+        
+    }
 }
 
 function camera_change() {

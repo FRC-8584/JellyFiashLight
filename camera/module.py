@@ -68,16 +68,6 @@ class Camera():
                 self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
                 self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
                 self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
-                print(f"Camera {self.id} load config")
-                print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
-                print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
-                print(self.camera.get(cv2.CAP_PROP_FPS))
-                print(self.camera.get(cv2.CAP_PROP_BRIGHTNESS))
-                print(self.camera.get(cv2.CAP_PROP_CONTRAST))
-                print(self.camera.get(cv2.CAP_PROP_SATURATION))
-                print(self.camera.get(cv2.CAP_PROP_HUE))
-                print(self.camera.get(cv2.CAP_PROP_GAIN))
-                print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
@@ -86,7 +76,7 @@ class Camera():
                     img = self.brightness(img)
                     img = self.contrast(img)
                     img = self.modify_color_temperature(img)
-                    img = self.saturation(img)
+                    # img = self.saturation(img)
                 try:
                     img = self.camera_module.runPipeline(img)
                 except:
