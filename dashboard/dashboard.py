@@ -15,7 +15,7 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
         return render_template(json.loads(data).get("file_name"))
     
     elif type_of == "request_camera":
-        # try:
+        try:
             data = raw_requests.get_json()
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
@@ -38,29 +38,29 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                 camera_list[camera_id].load_config()
 
                 return response
-        # except:
-        #     pass
+        except:
+            pass
     
     elif type_of == "send_camera":
-        # try:
+        try:
             data = raw_requests.get_json()
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
             if camera_id in range(5) and config_id in range(10):
                 origin_data = json.load(f"data/camera_{camera_id}.json")
                 origin_data["config_id"] = config_id
-                enable = origin_data["config_list"][config_id]["enable"]
+                enable = origin_data["config_list"][config_id]["code"]
                 origin_data["config_list"][config_id] = data["config"]
-                origin_data["config_list"][config_id]["enable"] = enable
+                origin_data["config_list"][config_id]["code"] = enable
                 json.dump(f"data/camera_{camera_id}.json", origin_data)
 
                 camera_list[camera_id].reload()
                 camera_list[camera_id].load_config()
-        # except:
-        #     pass
+        except:
+            pass
 
     elif type_of == "request_code":
-        # try:
+        try:
             data = raw_requests.get_json()
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
@@ -85,11 +85,11 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                 camera_list[camera_id].load_config()
 
                 return response
-        # except:
-        #     pass
+        except:
+            pass
     
     elif type_of == "send_code":
-        # try:
+        try:
             data = raw_requests.get_json()
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
@@ -107,8 +107,8 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
 
                 camera_list[camera_id].reload()
                 camera_list[camera_id].load_config()
-        # except:
-        #     pass
+        except:
+            pass
     return ("", 204)
 
 camera_list = []
