@@ -5,7 +5,7 @@ const IMG_KEY = [
     "blue-blance",
     "red-blance",
     "reduce-highlight"
-]
+];
 const CAMERA_KEY = [
     "width",
     "height",
@@ -16,11 +16,11 @@ const CAMERA_KEY = [
     "hue",
     "gain",
     "exposure"
-]
+];
 
 function on_load() {
     includeHTML();
-    hash_href()
+    hash_href();
 }
 
 var editor;
@@ -73,7 +73,7 @@ function hash_href() {
                     }
                     break;
             }
-            camera_change()
+            camera_change();
             break;
         case "settings":
             setting.classList.remove("not-display");
@@ -99,9 +99,10 @@ function slider_change(obj, before="", after="", percent=0) {
 function slider_reset(obj, value=0) {
     obj.value = value;
     try {
-        obj.oninput()
+        obj.oninput();
     }
     catch {}
+    send_camera();
 }
 
 function camera_change() {
@@ -114,15 +115,15 @@ function camera_change() {
     }
     let img = document.getElementById("camera-stream");
     img.src = "/camera_" + value + "?" + Date.now();
-    request_camera()
+    request_camera();
     let hash = window.location.hash.replace("#", "");
     if (hash == "advance") {
-        request_code()
+        request_code();
     }
 }
 
 function request_camera() {
-    let camera_id
+    let camera_id;
     try {
         camera_id = document.getElementById("camera-select").value;
     }
@@ -142,7 +143,7 @@ function request_camera() {
             let target_element = document.getElementById(key);
             target_element.value = img_data[key];
             try {
-                target_element.oninput()
+                target_element.oninput();
             }
             catch {}
         }
@@ -154,9 +155,9 @@ function request_camera() {
     };
 }
 function send_camera() {
-    let camera_id
+    let camera_id;
     try {
-        camera_id = document.getElementById("camera-select").value;;
+        camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
@@ -194,22 +195,36 @@ function request_code() {
     xhr.setRequestHeader("Request-type", "request_code");
     xhr.send(JSON.stringify(data));
     xhr.onload = function () {
-        code = xhr.responseText;
+        code = JSON.parse(xhr.responseText).code;
         try {
             editor.setValue(code);
         }
         catch {}
+        let switch_element = document.getElementById("enable-code");
+        if (JSON.parse(xhr.responseText).enable) {
+            switch_element.value = 1;
+        }
+        else {
+            switch_element.value = 1;
+        }
+        switch_element.onclick();
     };
 }
 function send_code() {
-    let camera_id
+    let camera_id, enable;
     try {
-        camera_id = document.getElementById("camera-select").value;;
+        camera_id = document.getElementById("camera-select").value;
     }
     catch {
         camera_id = 0;
     }
-    let data = {"camera-id": parseFloat(camera_id), "code":editor.getValue()};
+    if (document.getElementById("enable-code").value == 0) {
+        enable = false;
+    }
+    else {
+        enable = true;
+    }
+    let data = {"camera-id": parseFloat(camera_id), "code":editor.getValue(), "enable": enable};
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");

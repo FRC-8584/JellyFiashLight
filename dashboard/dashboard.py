@@ -38,8 +38,9 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             camera_id = data.get("camera-id", False)
             if camera_id in range(5):
                 response = make_response()
+                enable = json.load(f"data/camera_{camera_id}.json")["code"]
                 with open(f"camera/camera_{camera_id}.py", mode="r") as code_file:
-                    response.set_data(code_file.read())
+                    response.set_data(json.dumps({"code": code_file.read(), "enable": enable}))
                     code_file.close()
                 return response
         except:
@@ -49,11 +50,15 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             data = raw_requests.get_json()
             camera_id = data.get("camera-id", False)
             code = data["code"]
+            enable = data["enable"]
             if camera_id in range(5):
                 with open(f"camera/camera_{camera_id}.py", mode="w") as code_file:
                     code_file.write(code)
                     code_file.close()
                 camera_list[camera_id].reload()
+                config = json.load(f"data/camera_{camera_id}.json")
+                config["code"] = enable
+                json.dump(f"data/camera_{camera_id}.json", config)
         except:
             pass
     return ("", 204)
