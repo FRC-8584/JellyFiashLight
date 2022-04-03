@@ -16,11 +16,12 @@ class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
         self.reload()
-        self.img = np.zeros((480, 640, 3), dtype=np.uint8)
+        self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
         self.load_config()
+        self.camera_read_thread.start()
 
     def load_config(self):
         image_config: dict = json.load(f"data/camera_{self.id}.json").get("image", False)
@@ -28,7 +29,6 @@ class Camera():
         if image_config:
             self.config = image_config
         if camera_config:
-            print(f"Camera {self.id} load config start")
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
             self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
             self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
@@ -38,7 +38,7 @@ class Camera():
             self.camera.set(cv2.CAP_PROP_HUE, camera_config.get("hue", 0))
             self.camera.set(cv2.CAP_PROP_GAIN, camera_config.get("gain", 0))
             self.camera.set(cv2.CAP_PROP_EXPOSURE, camera_config.get("exposure", 0))
-            print(f"Camera {self.id} load config finish")
+            print(f"Camera {self.id} load config")
             print(self.camera.get(cv2.CAP_PROP_FRAME_WIDTH))
             print(self.camera.get(cv2.CAP_PROP_FRAME_HEIGHT))
             print(self.camera.get(cv2.CAP_PROP_FPS))
@@ -48,6 +48,11 @@ class Camera():
             print(self.camera.get(cv2.CAP_PROP_HUE))
             print(self.camera.get(cv2.CAP_PROP_GAIN))
             print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
+            # if self.camera_read_thread.is_alive():
+            #     self.camera_read_thread.stop()
+            #     self.camera_read_thread.join()
+            #     self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
+            #     self.camera_read_thread.start()
 
     def reload(self):
         if self.id == 0:
@@ -69,29 +74,26 @@ class Camera():
     # 讀取鏡頭
     def camera_read(self):
         while True:
-            try:
-                success, raw_img = self.camera.read()
-                if success:
-                    img = raw_img.copy()
-                    if self.config.get("enable", 0) == 1:
-                        img = self.highlight(img)
-                        img = self.brightness(img)
-                        img = self.contrast(img)
-                        img = self.modify_color_temperature(img)
-                        img = self.saturation(img)
-                    try:
-                        img = self.camera_module.runPipeline(img)
-                    except:
-                        pass
-                    self.img = img.copy()
-                    self.frame = encode_jpeg(img.copy(), colorspace="bgr")
-                else:
-                    try:
-                        self.camera = cv2.VideoCapture(self.id)
-                    except:
-                        sleep(5)
-            except:
-                pass
+            success, raw_img = self.camera.read()
+            if success:
+                img = raw_img.copy()
+                if self.config.get("enable", 0) == 1:
+                    img = self.highlight(img)
+                    img = self.brightness(img)
+                    img = self.contrast(img)
+                    img = self.modify_color_temperature(img)
+                    img = self.saturation(img)
+                try:
+                    img = self.camera_module.runPipeline(img)
+                except:
+                    pass
+                self.img = img.copy()
+                self.frame = encode_jpeg(img.copy(), colorspace="bgr")
+            else:
+                try:
+                    self.camera = cv2.VideoCapture(self.id)
+                except:
+                    sleep(5)
 
     # 調整亮度
     def brightness(self, r_img):
