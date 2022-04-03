@@ -93,4 +93,4 @@ class Web_UI():
         port: typing.Optional[int] = None,
         **options: typing.Any,
     ):
-        self.app.run(host=host, port=port, debug=True, use_reloader=False, **options)
+        self.app.run(host=host, port=port, debug=True, use_reloader=False, threaded=True, **options)

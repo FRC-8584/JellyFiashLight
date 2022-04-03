@@ -1,3 +1,5 @@
+import os
+os.environ["OPENCV_LOG_LEVEL"]="FATAL"
 from modules import json, Thread
 from importlib import reload
 from time import sleep
