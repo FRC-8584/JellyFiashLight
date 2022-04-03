@@ -90,8 +90,8 @@
                         </div>
                         <div class="option">
                             <p class="option-name cfont">亮度 (Brightness)</p>
-                            <input id="camera-brightness" class="cfont" type="number" min="0">
-                            <p class="option-unit cfont">N/A</p>
+                            <input id="camera-brightness" class="range-input" type="range" min="0" max="100" step="1" value="50" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">對比度 (Contrast)</p>
@@ -115,8 +115,8 @@
                         </div>
                         <div class="option">
                             <p class="option-name cfont">曝光 (Exposure)</p>
-                            <input id="camera-exposure" class="cfont" type="number" min="0">
-                            <p class="option-unit cfont">N/A</p>
+                            <input id="camera-exposure" class="range-input" type="range" min="-100" max="100" step="1" value="50" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)">
+                            <p class="option-value cfont">0%</p>
                         </div>
                     </div>
                     <div class="option">
