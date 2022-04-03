@@ -90,6 +90,9 @@ class Camera():
                 img += self.brightness(raw_img.copy())
                 img += self.contrast(raw_img.copy())
                 img += self.modify_color_temperature(raw_img.copy())
+                img[img > 255] = 255
+                img[img < 0] = 0
+                img = img.astype(np.uint8)
                 if self.code_enable:
                     try:
                         img = self.camera_func.runPipeline(img)
@@ -131,6 +134,7 @@ class Camera():
             img[img[:, :, 1] < 0, 1] = 0
             img = img.astype(np.uint8)
             img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
+            img = img.astype(np.float64)
             return img
         return r_img
 
