@@ -50,7 +50,7 @@ function hash_href() {
         case "global":
         case "basic":
         case "advance":
-            // camera_change()
+            camera_change()
             home.classList.remove("not-display");
             setting.classList.add("not-display");
             switch (hash) {
