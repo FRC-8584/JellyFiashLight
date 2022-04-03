@@ -63,7 +63,6 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
             if camera_id in range(5) and config_id in range(10):
-                print("success")
                 origin_data = json.load(f"data/camera_{camera_id}.json")
                 origin_data["config_id"] = config_id
                 json.dump(f"data/camera_{camera_id}.json", origin_data)
@@ -86,8 +85,8 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                 camera_list[camera_id].load_config()
 
                 return response
-        except:
-            pass
+        except Exception as e:
+            print(e)
     
     elif type_of == "send_code":
         try:
