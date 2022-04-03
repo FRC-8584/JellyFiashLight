@@ -28,7 +28,7 @@ class Camera():
         self.camera_queue = Queue()
         self.load_config()
         self.reload()
-        self.img = np.zeros((640, 480, 3), dtype=np.uint8)
+        self.img = np.zeros((480, 640, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
         self.camera = cv2.VideoCapture(id)
         self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{id}")
@@ -86,11 +86,11 @@ class Camera():
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
-                img = self.highlight(img)
-                img = self.brightness(img)
-                img = self.contrast(img)
-                img = self.modify_color_temperature(img)
-                img = self.saturation(img)
+                img += self.highlight(raw_img)
+                img += self.brightness(raw_img)
+                img += self.contrast(raw_img)
+                img += self.modify_color_temperature(raw_img)
+                img += self.saturation(raw_img)
                 if self.code_enable:
                     try:
                         img = self.camera_func.runPipeline(img)
@@ -110,17 +110,14 @@ class Camera():
     # 調整亮度
     def brightness(self, r_img):
         value = self.config.get("brightness", 0)
+        offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if value != 0:
             r_img = r_img.astype(np.float64)
             if value > 0:
-                r_img += (255 - np.min(r_img)) * value / 255
+                offset += (255 - np.min(r_img)) * value / 255
             else:
-                r_img -= (0 - np.max(r_img)) * value / 255
-            r_img += value
-            r_img[r_img > 255] = 255
-            r_img[r_img < 0] = 0
-            return r_img.astype(np.uint8)
-        return r_img
+                offset -= (0 - np.max(r_img)) * value / 255
+        return offset
 
     # 調整飽和度
     def saturation(self, r_img):
@@ -141,41 +138,36 @@ class Camera():
     # 調整對比度
     def contrast(self, r_img):
         c = self.config.get("contrast", 0)
+        offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if c != 0:
             img_gray = cv2.cvtColor(r_img, cv2.COLOR_BGR2GRAY)
             med = np.median(img_gray)
             r_img = r_img.astype(np.float64)
-            r_img += (r_img - med) * c / 255
-            r_img[r_img > 255] = 255
-            r_img[r_img < 0] = 0
-            return r_img.astype(np.uint8)
-        return r_img
+            offset += (r_img - med) * c / 255
+        return offset
 
     # 調整紅藍平衡
     def modify_color_temperature(self, r_img):
         blue_blance = self.config.get("blue-blance", 0)
         red_blance = self.config.get("red-blance", 0)
+        offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if blue_blance != 0 or red_blance != 0:
             r_img = r_img.astype(np.float64)
-            r_img[:, :, 0] += blue_blance - red_blance
-            r_img[:, :, 1] -= (blue_blance + red_blance) / 2
-            r_img[:, :, 2] += red_blance - blue_blance
-            r_img[r_img > 255] = 255
-            r_img[r_img < 0] = 0
-            return r_img.astype(np.uint8)
-        return r_img
+            offset[:, :, 0] += blue_blance - red_blance
+            offset[:, :, 1] -= (blue_blance + red_blance) / 2
+            offset[:, :, 2] += red_blance - blue_blance
+        return offset
 
     # 修正高光
     def highlight(self, r_img):
         value = self.config.get("reduce-highlight", 0)
+        offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if value != 0:
             img_gray = cv2.cvtColor(r_img, cv2.COLOR_BGR2GRAY)
             _, thresh = cv2.threshold(img_gray, 255 - value, 255, 0)
             r_img = r_img.astype(np.float64)
-            r_img[thresh == 255] *= 1 - (np.stack((img_gray,)*3, axis=-1)[thresh == 255] / 255) * 2 *value / 255
-            r_img[r_img < 0] = 0
-            r_img = r_img.astype(np.uint8)
-        return r_img
+            offset[thresh == 255] *= 1 - (np.stack((img_gray,)*3, axis=-1)[thresh == 255] / 255) * 2 *value / 255
+        return offset
 
     def output(self):
         while True:
