@@ -58,7 +58,7 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
             pass
 
     elif type_of == "request_code":
-        try:
+        # try:
             data = raw_requests.get_json()
             camera_id = int(data.get("camera-id", -1))
             config_id = int(data.get("config-id", -1))
@@ -78,15 +78,14 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                     response.set_data(
                         data
                     )
-                    print(data)
                     code_file.close()
 
                 camera_list[camera_id].reload()
                 camera_list[camera_id].load_config()
 
                 return response
-        except Exception as e:
-            print(e)
+        # except:
+        #     pass
     
     elif type_of == "send_code":
         try:

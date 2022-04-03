@@ -226,7 +226,6 @@ function request_code() {
     xhr.setRequestHeader("Request-type", "request_code");
     xhr.send(JSON.stringify(data));
     xhr.onload = function () {
-        console.log(xhr.responseText);
         code = JSON.parse(xhr.responseText).code;
         try {
             editor.setValue(code);
