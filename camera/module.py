@@ -134,9 +134,8 @@ class Camera():
             img[img[:, :, 1] < 0, 1] = 0
             img = img.astype(np.uint8)
             img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
-            img = img.astype(np.float64)
-            return img
-        return r_img
+            return img.astype(np.float64)
+        return r_img.astype(np.float64)
 
     # 調整對比度
     def contrast(self, r_img):
