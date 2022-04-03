@@ -15,7 +15,6 @@ import camera.camera_4 as camera_4
 class Camera():
     def __init__(self, id: int) -> None:
         self.id = id
-        self.camera_reading = True
         self.reload()
         self.img = np.zeros((640, 480, 3), dtype=np.uint8)
         self.frame = encode_jpeg(self.img.copy(), colorspace="bgr")
@@ -30,10 +29,6 @@ class Camera():
             self.config = image_config
         if camera_config:
             print(f"Camera {self.id} load config start")
-            if self.camera_read_thread.is_alive():
-                self.camera_reading = False
-                self.camera_read_thread.stop()
-                self.camera_read_thread.join()
             self.camera.release()
             self.camera = cv2.VideoCapture(self.id)
             self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
@@ -55,9 +50,6 @@ class Camera():
             print(self.camera.get(cv2.CAP_PROP_HUE))
             print(self.camera.get(cv2.CAP_PROP_GAIN))
             print(self.camera.get(cv2.CAP_PROP_EXPOSURE))
-            self.camera_reading = True
-            self.camera_read_thread = Thread(target=self.camera_read, name=f"camera_{self.id}")
-            self.camera_read_thread.start()
 
     def reload(self):
         if self.id == 0:
@@ -78,27 +70,30 @@ class Camera():
 
     # 讀取鏡頭
     def camera_read(self):
-        while self.camera_reading:
-            success, raw_img = self.camera.read()
-            if success:
-                img = raw_img.copy()
-                if self.config.get("enable", 0) == 1:
-                    img = self.highlight(img)
-                    img = self.brightness(img)
-                    img = self.contrast(img)
-                    img = self.modify_color_temperature(img)
-                    img = self.saturation(img)
-                try:
-                    img = self.camera_module.runPipeline(img)
-                except:
-                    pass
-                self.img = img.copy()
-                self.frame = encode_jpeg(img.copy(), colorspace="bgr")
-            else:
-                try:
-                    self.camera = cv2.VideoCapture(self.id)
-                except:
-                    sleep(5)
+        while True:
+            try:
+                success, raw_img = self.camera.read()
+                if success:
+                    img = raw_img.copy()
+                    if self.config.get("enable", 0) == 1:
+                        img = self.highlight(img)
+                        img = self.brightness(img)
+                        img = self.contrast(img)
+                        img = self.modify_color_temperature(img)
+                        img = self.saturation(img)
+                    try:
+                        img = self.camera_module.runPipeline(img)
+                    except:
+                        pass
+                    self.img = img.copy()
+                    self.frame = encode_jpeg(img.copy(), colorspace="bgr")
+                else:
+                    try:
+                        self.camera = cv2.VideoCapture(self.id)
+                    except:
+                        sleep(5)
+            except:
+                pass
 
     # 調整亮度
     def brightness(self, r_img):
