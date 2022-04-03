@@ -71,12 +71,11 @@ class Camera():
             success, raw_img = self.camera.read()
             if success:
                 img = raw_img.copy()
-                if self.config.get("enable", 0) == 1:
-                    img = self.highlight(img)
-                    img = self.brightness(img)
-                    img = self.contrast(img)
-                    img = self.modify_color_temperature(img)
-                    img = self.saturation(img)
+                img = self.highlight(img)
+                img = self.brightness(img)
+                img = self.contrast(img)
+                img = self.modify_color_temperature(img)
+                img = self.saturation(img)
                 try:
                     img = self.camera_module.runPipeline(img)
                 except:
@@ -91,77 +90,60 @@ class Camera():
 
     # 調整亮度
     def brightness(self, r_img):
-        value = self.config.get("brightness", 0) / 255
-        if value > 0:
-            increase_img = r_img.copy()
-            increase_img = 255 * (increase_img/255) ** (1 - value)
-            return np.array(increase_img, dtype=np.uint8)
-        elif value < 0:
-            decrease_img = r_img.copy()
-            if value == -1:
-                decrease_img = 0 * decrease_img
+        value = self.config.get("brightness", 0)
+        if value != 0:
+            r_img = r_img.astype(np.float64)
+            if value > 0:
+                r_img += (255 - np.min(r_img)) * value / 255
             else:
-                decrease_img = 255 * (decrease_img/255) ** (1 + -20 * value)
-            return np.array(decrease_img, dtype=np.uint8)
-        else:
-            return r_img
+                r_img -= (0 - np.max(r_img)) * value / 255
+            r_img += value
+            r_img[r_img > 255] = 255
+            r_img[r_img < 0] = 0
+            return r_img.astype(np.uint8)
+        return r_img
 
     # 調整飽和度
     def saturation(self, r_img):
-        value = self.config.get("saturation", 0) / 255
+        value = self.config.get("saturation", 0)
         if value != 0:
-            value = 9 * value / 255
-            img = r_img.astype(np.float32)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            if value != 0:
-                img[:, :, 1] *= max((1 + value), 0)
-                img[:, :, 1][img[:, :, 1] > 255] = 255
+            img = cv2.cvtColor(r_img, cv2.COLOR_BGR2HSV).astype(np.float64)
+            if value > 0:
+                img[:, :, 1] += (255 - np.min(img[:, :, 1])) * value / 255
+            else:
+                img[:, :, 1] -= (0 - np.max(img[:, :, 1])) * value / 255
+            img[img[:, :, 1] > 255, 1] = 255
+            img[img[:, :, 1] < 0, 1] = 0
+            img = img.astype(np.uint8)
             img = cv2.cvtColor(img, cv2.COLOR_HSV2BGR)
-            return np.array(img, dtype=np.uint8)
+            return img
         return r_img
 
     # 調整對比度
     def contrast(self, r_img):
-        c = self.config.get("contrast", 0) / 255.0 
+        c = self.config.get("contrast", 0)
         if c != 0:
-            k = math.tan((45 + 44 * c) / 180 * math.pi)
-
-            img = (r_img - 127.5) * k + 127.5
-
-            return np.clip(img, 0, 255).astype(np.uint8)
+            img_gray = cv2.cvtColor(r_img, cv2.COLOR_BGR2GRAY)
+            med = np.median(img_gray)
+            r_img = r_img.astype(np.float64)
+            r_img += (r_img - med) * c / 255
+            r_img[r_img > 255] = 255
+            r_img[r_img < 0] = 0
+            return r_img.astype(np.uint8)
         return r_img
 
     # 調整紅藍平衡
     def modify_color_temperature(self, r_img):
-        blue_blance = 50 * self.config.get("blue-blance", 0) / 255
-        red_blance = 50 * self.config.get("red-blance", 0) / 255
+        blue_blance = self.config.get("blue-blance", 0)
+        red_blance = self.config.get("red-blance", 0)
         if blue_blance != 0 or red_blance != 0:
-            imgB = r_img[:, :, 0] 
-            imgG = r_img[:, :, 1]
-            imgR = r_img[:, :, 2] 
-
-            bAve = cv2.mean(imgB)[0] - blue_blance + red_blance
-            gAve = cv2.mean(imgG)[0] + blue_blance + red_blance
-            rAve = cv2.mean(imgR)[0] + blue_blance - red_blance
-            aveGray = (int)(bAve + gAve + rAve) / 3
-
-            bCoef = aveGray / bAve
-            gCoef = aveGray / gAve
-            rCoef = aveGray / rAve
-            imgB = np.floor((imgB * bCoef))
-            imgG = np.floor((imgG * gCoef))
-            imgR = np.floor((imgR * rCoef))
-
-            imgb = imgB
-            imgb[imgb > 255] = 255
-            
-            imgg = imgG
-            imgg[imgg > 255] = 255
-            
-            imgr = imgR
-            imgr[imgr > 255] = 255
-                
-            return np.dstack((imgb, imgg, imgr)).astype(np.uint8)
+            r_img = r_img.astype(np.float64)
+            r_img[:, :, 0] += blue_blance - red_blance
+            r_img[:, :, 1] -= (blue_blance + red_blance) / 2
+            r_img[:, :, 2] += red_blance - blue_blance
+            r_img[r_img > 255] = 255
+            r_img[r_img < 0] = 0
+            return r_img.astype(np.uint8)
         return r_img
 
     # 修正高光
@@ -170,15 +152,10 @@ class Camera():
         if value != 0:
             img_gray = cv2.cvtColor(r_img, cv2.COLOR_BGR2GRAY)
             _, thresh = cv2.threshold(img_gray, 255 - value, 255, 0)
-            contours, _  = cv2.findContours(thresh.copy(),cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-            img_zero = np.zeros(r_img.shape, dtype=np.uint8)
-
-            for contour in contours:
-                x, y, w, h = cv2.boundingRect(contour)
-                img_zero[y:y+h, x:x+w] = 255
-                mask = img_zero
-
-            return cv2.illuminationChange(r_img, mask, alpha=0.2, beta=0.2) 
+            r_img = r_img.astype(np.float64)
+            r_img[thresh == 255] *= 1 - (np.stack((img_gray,)*3, axis=-1)[thresh == 255] / 255) * 2 *value / 255
+            r_img[r_img < 0] = 0
+            r_img = r_img.astype(np.uint8)
         return r_img
 
     def output(self):
@@ -191,3 +168,16 @@ def show(img):
         if cv2.waitKey() == 27:
             cv2.destroyAllWindows()
             break
+
+def brightness_0(r_img, value):
+    if value != 0:
+        r_img = r_img.astype(np.float64)
+        if value > 0:
+            r_img += (255 - np.min(r_img)) * value / 255
+        else:
+            r_img -= (0 - np.max(r_img)) * value / 255
+        r_img += value
+        r_img[r_img > 255] = 255
+        r_img[r_img < 0] = 0
+        return r_img.astype(np.uint8)
+    return r_img

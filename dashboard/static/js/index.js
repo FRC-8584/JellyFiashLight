@@ -1,5 +1,4 @@
 const IMG_KEY = [
-    "enable",
     "brightness",
     "saturation",
     "contrast",
