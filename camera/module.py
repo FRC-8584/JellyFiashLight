@@ -79,6 +79,7 @@ class Camera():
                     pass
                 self.img = img
                 self.frame = encode_jpeg(img.copy(), colorspace="bgr")
+                print("frame update")
             else:
                 try:
                     self.camera = cv2.VideoCapture(self.id)
