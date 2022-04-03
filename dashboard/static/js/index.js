@@ -108,7 +108,7 @@ function camera_change() {
     }
     let img = document.getElementById("camera-stream");
     img.src = "/camera_" + value + "?" + Date.now();
-    // request_camera()
+    request_camera()
 }
 
 function request_camera() {

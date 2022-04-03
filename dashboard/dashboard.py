@@ -63,7 +63,13 @@ for i in range(5):
 
 class Web_UI():
     app = Flask(__name__)
-    app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
+
+    @app.after_request
+    def after_request(response):
+        response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate, public, max-age=0"
+        response.headers["Expires"] = 0
+        response.headers["Pragma"] = "no-cache"
+        return response
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
@@ -72,21 +78,21 @@ class Web_UI():
             return deal_requeste(request_type, request.get_data(), request)
         return render_template("index.html")
 
-    # @app.route("/camera_0")
-    # def camera_0_r():
-    #     return Response(camera_list[0].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    # @app.route("/camera_1")
-    # def camera_1_r():
-    #     return Response(camera_list[1].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    # @app.route("/camera_2")
-    # def camera_2_r():
-    #     return Response(camera_list[2].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    # @app.route("/camera_3")
-    # def camera_3_r():
-    #     return Response(camera_list[3].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
-    # @app.route("/camera_4")
-    # def camera_4_r():
-    #     return Response(camera_list[4].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    @app.route("/camera_0")
+    def camera_0_r():
+        return Response(camera_list[0].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    @app.route("/camera_1")
+    def camera_1_r():
+        return Response(camera_list[1].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    @app.route("/camera_2")
+    def camera_2_r():
+        return Response(camera_list[2].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    @app.route("/camera_3")
+    def camera_3_r():
+        return Response(camera_list[3].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    @app.route("/camera_4")
+    def camera_4_r():
+        return Response(camera_list[4].output(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     def run(
         self,
