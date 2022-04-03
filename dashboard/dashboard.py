@@ -77,9 +77,8 @@ def deal_requeste(type_of: str, data, raw_requests: Request):
                                 "enable": origin_data["config_list"][config_id]["code"]
                             }
                         )
-                    response.set_data(
-                        data
-                    )
+                    print(data)
+                    response.set_data(data)
                     code_file.close()
 
                 camera_list[camera_id].reload()
