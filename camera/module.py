@@ -72,8 +72,8 @@ class Camera():
         while True:
             if not self.camera_queue.empty():
                 camera_config: dict = self.camera_queue.get()
-                self.camera.release()
-                self.camera = cv2.VideoCapture(self.id)
+                # self.camera.release()
+                # self.camera = cv2.VideoCapture(self.id)
                 self.camera.set(cv2.CAP_PROP_FRAME_WIDTH, camera_config.get("width", 0))
                 self.camera.set(cv2.CAP_PROP_FRAME_HEIGHT, camera_config.get("height", 0))
                 self.camera.set(cv2.CAP_PROP_FPS, camera_config.get("fps", 0))
