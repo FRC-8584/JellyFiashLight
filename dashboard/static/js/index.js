@@ -102,6 +102,7 @@ function slider_reset(obj, value=0) {
         obj.oninput();
     }
     catch {}
+    send_camera();
 }
 
 function camera_change() {
