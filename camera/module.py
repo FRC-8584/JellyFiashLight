@@ -111,7 +111,7 @@ class Camera():
 
     # 調整亮度
     def brightness(self, r_img):
-        value = self.config.get("brightness", 0)
+        value = self.config.get("brightness", 0) / 2
         offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if value != 0:
             r_img = r_img.astype(np.float64)
@@ -150,8 +150,8 @@ class Camera():
 
     # 調整紅藍平衡
     def modify_color_temperature(self, r_img):
-        blue_blance = self.config.get("blue-blance", 0)
-        red_blance = self.config.get("red-blance", 0)
+        blue_blance = self.config.get("blue-blance", 0) / 2
+        red_blance = self.config.get("red-blance", 0) / 2
         offset = np.zeros((len(r_img), len(r_img[0]), 3), dtype=np.float64)
         if blue_blance != 0 or red_blance != 0:
             r_img = r_img.astype(np.float64)
