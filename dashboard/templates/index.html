@@ -29,32 +29,32 @@
                         <p class="cfont mode-title">影像前處理 (Image Preprocessing)</p>
                         <div class="option">
                             <p class="option-name cfont">亮度 (Brightness)</p>
-                            <input id="brightness" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="brightness" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">飽和度 (Saturation)</p>
-                            <input id="saturation" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="saturation" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">對比度 (Contrast)</p>
-                            <input id="contrast" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="contrast" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">藍平衡 (Blue Blance)</p>
-                            <input id="blue-blance" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="blue-blance" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">紅平衡 (Red Blance)</p>
-                            <input id="red-blance" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="red-blance" class="range-input" type="range" min="-255" max="255" step="0.1" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                         <div class="option">
                             <p class="option-name cfont">高光修正 (Reduce Highlight)</p>
-                            <input id="reduce-highlight" class="range-input" type="range" min="0" max="255" step="0.05" value="0" oninput="slider_change(this, '', '%', 100)" ondblclick="slider_reset(this, 0)" onchange="send_camera()">
+                            <input id="reduce-highlight" class="range-input" type="range" min="0" max="255" step="0.05" value="0" oninput="slider_change(this, '', '%', 100);send_camera();" ondblclick="slider_reset(this, 0)">
                             <p class="option-value cfont">0%</p>
                         </div>
                     </div>
