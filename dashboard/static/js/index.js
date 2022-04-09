@@ -21,7 +21,7 @@ const CAMERA_KEY = [
 function on_load() {
     includeHTML();
     hash_href();
-    setInterval(send_camera, 500);
+    setInterval(send_camera, 50);
 }
 
 var editor;
