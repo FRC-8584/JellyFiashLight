@@ -21,6 +21,7 @@ const CAMERA_KEY = [
 function on_load() {
     includeHTML();
     hash_href();
+    setInterval(send_camera, 500);
 }
 
 var editor;
@@ -102,7 +103,6 @@ function slider_reset(obj, value=0) {
         obj.oninput();
     }
     catch {}
-    send_camera();
 }
 
 function camera_change() {
