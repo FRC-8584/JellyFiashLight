@@ -26,6 +26,7 @@ class Camera():
         self.id = id
         self.camera_module = MODULE_LIST[id]
         self.camera_queue = Queue()
+        self.old_camera_config = {}
         self.load_config()
         self.reload()
         self.img = np.zeros((480, 640, 3), dtype=np.uint8)
@@ -42,7 +43,8 @@ class Camera():
         
         if image_config:
             self.config = image_config
-        if camera_config:
+        if camera_config and camera_config != self.old_camera_config:
+            self.old_camera_config = camera_config
             self.camera_queue.put(camera_config)
 
     def reload(self):
