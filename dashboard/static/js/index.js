@@ -21,7 +21,7 @@ const CAMERA_KEY = [
 function on_load() {
     includeHTML();
     hash_href();
-    setInterval(send_camera, 100);
+    setInterval(send_camera, 150);
 }
 
 var editor;
@@ -199,7 +199,10 @@ function send_camera() {
     xhr.open("POST", "/", true);
     xhr.setRequestHeader("Content-type", "application/json");
     xhr.setRequestHeader("Request-type", "send_camera");
-    xhr.send(JSON.stringify(data));
+    try {
+        xhr.send(JSON.stringify(data));
+    }
+    catch {}
 }
 
 function request_code() {
